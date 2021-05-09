@@ -13,7 +13,7 @@ CSV="$(pwd)/data"
 script="$(pwd)/scripts"
 a=0
 #run pdbtorsions
-for file in $PDB/*.pdb
+for file in $sPDB/*.pdb
 do
     # a=$(($a+1))
     # if [ $a -eq 3 ]
