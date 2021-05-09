@@ -50,7 +50,8 @@ def proline_extr(path):
             for key in upstream_keys:
                 if key != k:
                     A = index_dict.get(key)
-
+                    if A == None: #if at the start or end of the seq
+                        break
                    #change three letter code to one letter
                     one_code = config.prot_seq[A[1]]
                     upstream_seq.append(one_code)
@@ -60,6 +61,8 @@ def proline_extr(path):
             for key in downstream_keys:
                 if key != k:
                     A = index_dict.get(key)
+                    if A == None:  # if at the start or end of the seq
+                        break
 
                     #change three letter code to one letter
                     one_code = config.prot_seq[A[1]]
@@ -71,6 +74,7 @@ def proline_extr(path):
 #**************************************************************
 def to_csv(tor, pdb):
     #csv_line = "pdb,atom num,type,upstream seq,downstream\n" 
+    csv_line = ''
     for k, v in tor.items():
         csv_line += pdb+ ',' + k + ',' + v[1] + ',' + v[0] + ',' + v[2] + '\n'
     return csv_line
