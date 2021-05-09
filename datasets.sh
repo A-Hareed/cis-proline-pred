@@ -5,6 +5,7 @@ cwd="$(pwd)/torsion"
 
 PDB="$(pwd)/pdb"
 #server pdb
+sPDB="/serv/data/pdb"
 #goes here ....
 
 CSV="$(pwd)/data"
