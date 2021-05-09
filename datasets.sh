@@ -15,12 +15,12 @@ a=0
 #run pdbtorsions
 for file in $PDB/*.pdb
 do
-    a=$(($a+1))
-    if [ $a -eq 3 ]
-    then
-        echo "a = $a"
-        break
-    fi
+    # a=$(($a+1))
+    # if [ $a -eq 3 ]
+    # then
+    #     echo "a = $a"
+    #     break
+    # fi
     pdbtorsions $file > $cwd/`basename $file .pdb`.txt.some
 done
 #creat the csv output file 
