@@ -21,7 +21,7 @@ do
     #     echo "a = $a"
     #     break
     # fi
-    pdbtorsions $file > $cwd/`basename $file .pdb`.txt.some
+    pdbtorsions $file > $cwd/`basename $file .pdb`.txt
 done
 #creat the csv output file 
 for file in $cwd/*.txt
