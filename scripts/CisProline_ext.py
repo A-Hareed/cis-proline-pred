@@ -86,10 +86,10 @@ str_path = path
 p = re.compile(r'[/a-zA-Z_-]+/([0-9A-Za-z]+)')
 p2 = re.compile(r'([/a-zA-Z_-]+)/(torsion)')
 match= p.search(str_path)
-match2= p2.search(str_path)
-pdb_name = match.group(1)
+#match2= p2.search(str_path)
+#pdb_name = match.group(1)
 
-export_path = match2.group(1) + "/dataset"
+#export_path = match2.group(1) + "/dataset"
 
 cis_proline_dict = proline_extr(path)
 
