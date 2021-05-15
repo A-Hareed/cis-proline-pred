@@ -23,8 +23,8 @@ for file in file_names: #loops through torsion files
                     for num in range(0,kmer):
                         aa_test1 = [False if aa not in config.prot_seq.keys() else True for aa in  upstream_seq]
                         aa_test2 = [False if aa not in config.prot_seq.keys() else True for aa in  downstream_seq]
-                    # combine sequence
-                    angle = abs(float(tup[-1]))
+                    # get torsion angle
+                    angle = abs(float(torsion_list[i-1][-1]))
                     # regex for pdb name 
                     pdb_match = re.search(r'[/a-zA-Z_-]*([a-zA-Z0-9\_]+)\.', file) 
                     pdb_name = pdb_match.group(1)
