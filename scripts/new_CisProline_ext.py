@@ -3,14 +3,16 @@ import os
 import config # lookup table for single letter amino acid code
 import re
 
-os.chdir('/home/ayub/Desktop/cis_proline/cis-proline-pred/torsion') # changes directory
+os.chdir('/home/ayubh/project/git_clone/cis-proline-pred/torsion/') # changes directory
 
 file_names = os.listdir()  # gets file names ***if you whant to test with one torsion than use ['name'] 
+
 
 for file in file_names: #loops through torsion files
     with open(file, 'r') as f:
         torsion_list_raw = f.read().splitlines() # reads text file as a list where each line is the item
         torsion_list = [tuple(i.split()) for i in torsion_list_raw] # splits each line into items 
+        torsion_list = torsion_list[2:]    # removes header
 
         for i, tup in enumerate(torsion_list): #loop through list
             data_rows, form, no_flank, kmer = [], '', False, 3      #varibles and list set up
@@ -33,7 +35,10 @@ for file in file_names: #loops through torsion files
                     else:
                         form = 'cis'  # when proline is found n-1 it has a small angle but this can't be considered as a cis-proline
 
-                    if False in aa_test1 or False in aa_test2: # prevents none simple amino acids causing errors
+                    if False in aa_test1 or False in aa_test2 or angle == 9999.000: # prevents none simple amino acids causing errors and flanking seq
+                        continue						    # that overlaps two chains
+
+                    elif torsion_list[i+kmer][0][0] != tup[0][0] or torsion_list[i-kmer][0][0] != tup [0][0]:
                         continue
 
                     else:    
