@@ -17,7 +17,7 @@ for file in file_names: #loops through torsion files
         for i, tup in enumerate(torsion_list): #loop through list
             data_rows, form, no_flank, kmer = [], '', False, 3      #varibles and list set up
             if i > 1:
-                if tup[1] == "PRO" and (i + kmer) <= (len(torsion_list)-1) and (i - kmer) > 0 and torsion_list[i - 1][1] != "PRO":
+                if tup[1] == "PRO" and (i + kmer) <= (len(torsion_list)-1) and (i - kmer) > 0:
                     kmer_range = range(1, (kmer+1)) # create range to extract flanking sequence
                     upstream_seq = [torsion_list[i + k][1] for k in kmer_range]
                     downstream_seq = [torsion_list[i - k][1] for k in reversed(kmer_range)]
