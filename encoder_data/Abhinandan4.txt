@@ -1,0 +1,26 @@
+   NSc Len HPhob   Charge
+A: 1   1   00.250   1
+R: 7   6   -1.800   0
+N: 4   3   -0.640   0
+D: 4   3   -0.720  -1
+C: 2   2   00.040   0
+Q: 5   4   -0.690   0
+E: 5   4   -0.620  -1
+G: 0   0   00.160   0
+H: 6   4   -0.400   0.5
+I: 4   3   00.730   0
+L: 4   3   00.530   0
+K: 5   5   -1.100   1
+M: 4   4   00.260   0
+F: 7   5   00.610   0
+P: 3   2   -0.070   0
+S: 2   2   -0.260   0
+T: 3   2   -0.180   0
+W: 10  6   00.370   0
+Y: 8   6   00.020   0
+V: 3   2   00.540   0
+
+#NSc:    Number of sidechain non-hydrogen atoms
+#Len:    Length of shortest route to most distal sidechain atom
+#HPhob:  Eisenberg consensus hydrophobicity, Eisenberg et al 'Faraday Symp.Chem.Soc'17(1982)109
+#Charge: Sidehchain charge (0.5 for his since it is sometimes charged)
