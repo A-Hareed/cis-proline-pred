@@ -7,25 +7,13 @@
 #   Version:    V1.0
 #   Date:       18.05.21
 #   Function:   Encodes residues in a csv file
-#               using 
+#               given encoding type 
 #
 #   Author:     Ayub Hareed
 #   
 #   EMail:      ayubm56@gmail.com
 #
-#*************************************************************************
-#
-#   This program is not in the public domain, but it may be copied
-#   according to the conditions laid out in the accompanying file
-#   COPYING.DOC
-#
-#   The code may be modified as required, but any modifications must be
-#   documented so that the person responsible can be identified. If
-#   someone else breaks this code, I don't want to be blamed for code
-#   that does not work!
-#
-#   The code may not be sold commercially or included as part of a
-#   commercial product except as described in the file COPYING.DOC.
+
 #
 #*************************************************************************
 #
@@ -45,7 +33,6 @@
 #*************************************************************************
 
 # import libraries 
-import csv
 import sys
 import utilities
 
