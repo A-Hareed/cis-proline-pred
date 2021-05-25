@@ -89,42 +89,48 @@ def amino_acid_encoder(proline_csv, encoder):
 
 # using blosum45 as encoder
 if(sys.argv[1] == '-b45'):
-    encoder = utilities.blosum45_dict
+    blosum45 = utilities.Encode('../encoder_data/BLOSUM45', 'blosum45')
+    encoder = blosum45.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
     print(amino_acid_encoder(proline_csv, encoder))
 
 # using blosum62 as encoder
 if(sys.argv[1] == '-b62'):
-    encoder = utilities.blosum62_dict
+    blosum62 = utilities.Encode('../encoder_data/BLOSUM62', 'blosum62')
+    encoder = blosum62.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
     print(amino_acid_encoder(proline_csv, encoder))
 
 # using blosum80 as encoder
 if(sys.argv[1] == '-b80'):
-    encoder = utilities.blosum80_dict
+    blosum80 = utilities.Encode('../encoder_data/BLOSUM80', 'blosum80')
+    encoder = blosum80.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
     print(amino_acid_encoder(proline_csv, encoder))
 
 # using blosum90 as encoder
 if(sys.argv[1] == '-b90'):
-    encoder = utilities.blosum90_dict
+    blosum90 = utilities.Encode('../encoder_data/BLOSUM90', 'blosum90')
+    encoder = blosum90.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
     print(amino_acid_encoder(proline_csv, encoder))
 
 
 if(sys.argv[1] == '-t5'):
-    encoder = utilities.tscale5_dict
+    tscale5 = utilities.Encode('../encoder_data/TScale5.txt', 'tscale5')
+    encoder = tscale5.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
     print(amino_acid_encoder(proline_csv, encoder))
 
 
 if(sys.argv[1] == '-a4'):
-    encoder = utilities.abhinandan4_dict
+    abhinandan4 = utilities.Encode('../encoder_data/Abhinandan4.txt', 'abhinandan4') 
+    encoder = abhinandan4.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
     print(amino_acid_encoder(proline_csv, encoder))
@@ -132,5 +138,6 @@ if(sys.argv[1] == '-a4'):
 #*************************************************************************
 #   first function handles argv arguments and error inputs from the 
 #   command line along with the help (-h) input
+
 
 #*************************************************************************
