@@ -148,6 +148,7 @@ def process_a_proline(data, window, line_number):
 
     # Find the residue label (this is the first field of the data line)
     fields    = the_line.split()
+    print(fields)
     the_label = fields[0]
     # Add this to the result
     result    = result + the_label
