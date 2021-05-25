@@ -170,18 +170,13 @@ def process_a_proline(data, window, line_number):
         # If the chain label isn't the same as our key residue, return
         # a blank string
         this_line  = data[current_line_number]
-        if len(the_line) > 2:
-            this_chain = this_line[0]
-            fields     = this_line.split()
-            print(the_line)
-            this_residue = fields[1]
-            # uses function from utilities to convert three letter amino acid code 
-            # to one letter
-            one_letter = utilities.amino_acid_code_converter(this_residue)
-        else:
-            this_residue = ''
-            one_letter = ''
-            print('{}'.format(the_label))
+        this_chain = this_line[0]
+        fields     = this_line.split()
+        print(the_line)
+        this_residue = fields[1]
+        # uses function from utilities to convert three letter amino acid code 
+        # to one letter
+        one_letter = utilities.amino_acid_code_converter(this_residue)
         if(this_chain != the_chain):
             return('')
 
