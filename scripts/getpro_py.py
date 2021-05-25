@@ -116,7 +116,7 @@ def check_cis_trans(dataline):
 
 # ------------------------------------------------------------------------
 
-def process_a_proline(data, window, line_number, basen):
+def process_a_proline(data, window, line_number):
     """
     Input:   data (string list)    - the pdbtorsions file contents
              window (integer)      - the window size - actually the number
@@ -149,7 +149,6 @@ def process_a_proline(data, window, line_number, basen):
 
     # Find the residue label (this is the first field of the data line)
     fields    = the_line.split()
-    print(basename(basen))
     the_label = fields[0]
     # Add this to the result
     result    = result + the_label
@@ -174,7 +173,6 @@ def process_a_proline(data, window, line_number, basen):
         this_line  = data[current_line_number]
         this_chain = this_line[0]
         fields     = this_line.split()
-        print(fields)
         this_residue = fields[1]
         # uses function from utilities to convert three letter amino acid code 
         # to one letter
@@ -196,7 +194,7 @@ def process_a_proline(data, window, line_number, basen):
         
 
 # ------------------------------------------------------------------------
-def find_prolines(data, window, basen):
+def find_prolines(data, window):
     """
     Input:   data (string list) - the contents of the pdbtorsions output
              window (integer)   - the window size - actually the number
@@ -217,7 +215,7 @@ def find_prolines(data, window, basen):
         if(line[0] != '#'):
             fields = line.split()
             if(fields[1] == 'PRO'):
-                result = process_a_proline(data, window, line_number,basen)
+                result = process_a_proline(data, window, line_number)
                 if(result != ''):
                     results.append(result)
         line_number = line_number + 1
