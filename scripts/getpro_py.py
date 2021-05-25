@@ -172,7 +172,6 @@ def process_a_proline(data, window, line_number):
         this_line  = data[current_line_number]
         this_chain = this_line[0]
         fields     = this_line.split()
-        print(the_line)
         this_residue = fields[1]
         # uses function from utilities to convert three letter amino acid code 
         # to one letter
