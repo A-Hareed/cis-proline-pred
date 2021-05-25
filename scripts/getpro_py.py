@@ -149,7 +149,6 @@ def process_a_proline(data, window, line_number, basen):
 
     # Find the residue label (this is the first field of the data line)
     fields    = the_line.split()
-    print(fields)
     print(basename(basen))
     the_label = fields[0]
     # Add this to the result
@@ -175,6 +174,7 @@ def process_a_proline(data, window, line_number, basen):
         this_line  = data[current_line_number]
         this_chain = this_line[0]
         fields     = this_line.split()
+        print(fields)
         this_residue = fields[1]
         # uses function from utilities to convert three letter amino acid code 
         # to one letter
