@@ -262,7 +262,7 @@ def directory_input(directory, window):
       fileid = basename(file)
 
       #  results - prepending the filename to each line
-      for result in find_prolines(data, window, file):
+      for result in find_prolines(data, window):
           results += fileid + ',' + result + '\n'
     
   return (results)
