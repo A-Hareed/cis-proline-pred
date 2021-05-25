@@ -115,7 +115,8 @@ def check_cis_trans(dataline):
     return('cis')
 
 # ------------------------------------------------------------------------
-def process_a_proline(data, window, line_number):
+
+def process_a_proline(data, window, line_number, basen):
     """
     Input:   data (string list)    - the pdbtorsions file contents
              window (integer)      - the window size - actually the number
@@ -149,6 +150,7 @@ def process_a_proline(data, window, line_number):
     # Find the residue label (this is the first field of the data line)
     fields    = the_line.split()
     print(fields)
+    print(basename(basen))
     the_label = fields[0]
     # Add this to the result
     result    = result + the_label
@@ -194,7 +196,7 @@ def process_a_proline(data, window, line_number):
         
 
 # ------------------------------------------------------------------------
-def find_prolines(data, window):
+def find_prolines(data, window, basen):
     """
     Input:   data (string list) - the contents of the pdbtorsions output
              window (integer)   - the window size - actually the number
@@ -215,7 +217,7 @@ def find_prolines(data, window):
         if(line[0] != '#'):
             fields = line.split()
             if(fields[1] == 'PRO'):
-                result = process_a_proline(data, window, line_number)
+                result = process_a_proline(data, window, line_number,basen)
                 if(result != ''):
                     results.append(result)
         line_number = line_number + 1
@@ -262,7 +264,7 @@ def directory_input(directory, window):
       fileid = basename(file)
 
       #  results - prepending the filename to each line
-      for result in find_prolines(data, window):
+      for result in find_prolines(data, window, file):
           results += fileid + ',' + result + '\n'
     
   return (results)
