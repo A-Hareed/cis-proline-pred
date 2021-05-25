@@ -94,9 +94,11 @@ def blosum_encode(lst):
     V1.0   01.05.21  Original   By: Ayub Hareed
     """
     blosum_dict = {}
+    blosum_sub_score = ''
     for line in lst:
         if len(line) > 0 and line[0] != ' ':
-            blosum_sub_score = [int(i) for i in  line[1:].split()]
+            score = [i for i in line[1:].split()]
+            blosum_sub_score = ','.join(score[:20])  
             blosum_dict[line[0]] = blosum_sub_score
     return (blosum_dict)
 
@@ -108,37 +110,57 @@ def tscale5_or_abhinandan4_encode(lst):
     V1.0   01.05.21  Original   By: Ayub Hareed
     """
     encode_dict = {}
+    encode_str = ''
     for line in lst:
         if len(line) > 0 and line[0] != ' ':
-            encode_lst = [float(i) for i in line[1:].replace(':', '').split()]
-            encode_dict[line[0]] = encode_lst
+            score = [float(i) for i in line[1:].replace(':', '').split()]
+            encode_str = ','.join([str(i) for i in score])   
+            encode_dict[line[0]] = encode_str
     return (encode_dict)
 
 #*************************************************************************
 
+class Encode:
+    def __init__(self, path,encoder):
+        self.path = path
+        self.encoder = encoder
+    
+    def get_encode_dict(self):
+        self.lst = read_encode_file(self.path)
+        if 'blosum' in self.encoder:
+            self.dict = blosum_encode(self.lst)
+            return (self.dict)
+        if 'tscale5' in self.encoder or 'abhinandan4' in self.encoder:
+            self.dict = tscale5_or_abhinandan4_encode(self.lst)
+            return (self.dict)
 
 
+
+
+#*************************************************************************
 # read in encode files
-blosum45_list = read_encode_file('Encodings/data/BLOSUM45') # blosum62 encode file
-blosum62_list = read_encode_file('Encodings/data/BLOSUM62') # blosum62 encode file
-blosum80_list = read_encode_file('Encodings/data/BLOSUM80') # blosum62 encode file
-blosum90_list = read_encode_file('Encodings/data/BLOSUM90') # blosum62 encode file
-TScale5_list = read_encode_file('Encodings/data/TScale5.txt') # TScale5  encode file
-abhinandan4_list = read_encode_file('Encodings/data/Abhinandan4.txt') # TScale5  encode file
+# blosum45_list = read_encode_file('Encodings/data/BLOSUM45') # blosum62 encode file
+# blosum62_list = read_encode_file(
+#     'Encodings/data/BLOSUM62')  # blosum62 encode file
+# blosum80_list = read_encode_file(
+#     'Encodings/data/BLOSUM80')  # blosum62 encode file
+# blosum90_list = read_encode_file('Encodings/data/BLOSUM90') # blosum62 encode file
+# TScale5_list = read_encode_file('Encodings/data/TScale5.txt') # TScale5  encode file
+# abhinandan4_list = read_encode_file('Encodings/data/Abhinandan4.txt') # TScale5  encode file
 
 
-# blosum encode dictionaries
-blosum45_dict = blosum_encode(blosum45_list)
-blosum62_dict = blosum_encode(blosum62_list)
-blosum80_dict = blosum_encode(blosum80_list)
-blosum90_dict = blosum_encode(blosum90_list)
+# # blosum encode dictionaries
+# blosum45_dict = blosum_encode(blosum45_list)
+# blosum62_dict = blosum_encode(blosum62_list)
+# blosum80_dict = blosum_encode(blosum80_list)
+# blosum90_dict = blosum_encode(blosum90_list)
 
-# TScale5 encode dictionary
-tscale5_dict = tscale5_or_abhinandan4_encode(TScale5_list)
+# # TScale5 encode dictionary
+# tscale5_dict = tscale5_or_abhinandan4_encode(TScale5_list)
 
 
-#  abhinandan4 encode dictionary
-abhinandan4_dict = tscale5_or_abhinandan4_encode(abhinandan4_list)
+# #  abhinandan4 encode dictionary
+# abhinandan4_dict = tscale5_or_abhinandan4_encode(abhinandan4_list)
 
 
 
