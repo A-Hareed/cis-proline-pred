@@ -35,8 +35,8 @@
 # import librearies
 import sys
 import string
-
-#*********************************************************
+import random 
+#********************************************************************
 def read_in_csv(filename):
     """
     input filename (string) - takes in file name from the 
@@ -48,12 +48,12 @@ def read_in_csv(filename):
     V1.0   25.05.21  Original   By: Ayub Hareed
     """
 
-    #reads file in 
+    # reads file in 
     with open(filename, 'r') as f:
-        file_lst = f.read().splitlines() #splits csv file by line 
+        file_lst = f.read().splitlines() # splits csv file by line 
     return (file_lst)
 
-#*********************************************************
+#********************************************************************
 def test_split(cis_file, trans_file):
     """
 
@@ -63,6 +63,11 @@ def test_split(cis_file, trans_file):
     #  find how much of the file to split the file
     cis_length = len(cis_file)
     # print(cis_length)
+
+    # random shuffle of trans data list
+    random.seed(43)
+    r = random.SystemRandom()
+    r.shuffle(trans_file)
 
     # use the length to split the file
     file_num = []
@@ -135,7 +140,7 @@ print(out_file_lst)
 # print(file_list[0][0])
 
 for i,a in enumerate(out_file_lst):
-    out_file_name = 'temp_' + a + '.csv'
+    out_file_name = 'temp_rand_' + a + '.csv'
     file_lst = test_split(cis_list,trans_list)
     file = final_out(file_lst,i)
     sys.stdout = open(out_file_name, 'w')
