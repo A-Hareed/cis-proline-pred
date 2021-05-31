@@ -1,0 +1,144 @@
+#! /usr/bin/python3
+#*************************************************************************
+#
+#   Program:    join_cis_trans
+#   File:       join_cis_trans.csv
+#
+#   Version:    V1.0
+#   Date:       26.05.21
+#   Function:   splits encoded cis/trans proline dataset
+#               into muliple csv with equal amount of cis and trans
+#
+#
+#   Author:     Ayub Hareed
+#
+#   EMail:      ayubm56@gmail.com
+#
+#
+#*************************************************************************
+#
+#   Description:
+#   ============
+#
+#*************************************************************************
+#
+#   Usage:
+#   ======
+#       
+#*************************************************************************
+#
+#   Revision History:
+#   =================
+#   V1.0   25.05.21  Original   By: Ayub Hareed
+#*************************************************************************
+
+# import librearies
+import sys
+import string
+
+#*********************************************************
+def read_in_csv(filename):
+    """
+    input filename (string) - takes in file name from the 
+                              proline csv dataset  
+
+    returns file_lst (list of strings) - returns a list of each 
+                                         each individual line
+
+    V1.0   25.05.21  Original   By: Ayub Hareed
+    """
+
+    #reads file in 
+    with open(filename, 'r') as f:
+        file_lst = f.read().splitlines() #splits csv file by line 
+    return (file_lst)
+
+#*********************************************************
+def test_split(cis_file, trans_file):
+    """
+
+
+    """
+    
+    #  find how much of the file to split the file
+    cis_length = len(cis_file)
+    # print(cis_length)
+
+    # use the length to split the file
+    file_num = []
+    start = 0
+    counter = 0
+    initial_lst = []
+    initial_lst.extend(cis_file)
+    for line in trans_file:
+        # print(counter)
+        if (counter <= cis_length):
+            initial_lst.append(line)
+            counter += 1
+        
+        if (counter == cis_length):
+            file_num.append(initial_lst)
+            initial_lst = []
+            initial_lst.extend(cis_file)
+            counter = 0
+    return (file_num)
+#*********************************************************
+def final_out(lst, num):
+    """
+
+
+    """
+    file_lst = lst[num]
+    result = ''
+    for line in file_lst:
+        result += line + '\n'
+    return (result)
+
+#*********************************************************
+def file_suffix_name(num):
+    """
+
+
+    """
+    
+    letters = string.ascii_lowercase
+
+    suffix_lst = []
+    for suffix in range(0,num):
+        suffix_lst.append(letters[suffix])
+    return (suffix_lst)
+
+
+
+
+#*********************************************************
+#   main program
+#*********************************************************
+
+# read in the csv file that contains cis
+cis_filename = sys.argv[1]
+cis_list = read_in_csv(cis_filename)
+
+# read in the csv file that contains trans 
+trans_filename = sys.argv[2]
+trans_list = read_in_csv(trans_filename)
+
+
+
+
+num = len(test_split(cis_list,trans_list))
+print(num)
+out_file_lst = file_suffix_name(num)
+print(out_file_lst)
+# print(trans_list)
+
+# print(file_list[0][0])
+
+for i,a in enumerate(out_file_lst):
+    out_file_name = 'temp_' + a + '.csv'
+    file_lst = test_split(cis_list,trans_list)
+    file = final_out(file_lst,i)
+    sys.stdout = open(out_file_name, 'w')
+    print(file)
+    sys.stdout.close()
+
