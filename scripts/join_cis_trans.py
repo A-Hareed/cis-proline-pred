@@ -56,6 +56,7 @@ def read_in_csv(filename):
 #********************************************************************
 def test_split(cis_file, trans_file):
     """
+    input 
 
 
     """
@@ -113,37 +114,62 @@ def file_suffix_name(num):
         suffix_lst.append(letters[suffix])
     return (suffix_lst)
 
+#*********************************************************
+def usage_die():
+    """
+    Prints a usage message and exits the program
 
+    V1.0   25.05.21  Original   By: Ayub Hareed
 
+    """
+    print("""
+join_cis_trans V1.0 Ayub Hareed
+
+Usage: Using csv files that contain only encoded cis-proline data [file one]
+       and encoded trans-proline data [file two], the two files are combined to create 
+       multiple proline csv files with same cis-proline datasets but randomly shuffled
+       trans datasets.
+       encoded_cis_dataset.csv,  -- the encoded csv output from encoder.py  
+       encoded_trans_dataset.csv    split using grep "cis" and grep "trans"
+       
+command example: ./join_cis_proline.py  [cis csv file] [trans csv file]
+
+""")
+    sys.exit()
 
 #*********************************************************
 #   main program
 #*********************************************************
 
-# read in the csv file that contains cis
-cis_filename = sys.argv[1]
-cis_list = read_in_csv(cis_filename)
+if (len(sys.argv) <= 2 or
+    sys.argv[1] == '-h'):
+    usage_die()
 
-# read in the csv file that contains trans 
-trans_filename = sys.argv[2]
-trans_list = read_in_csv(trans_filename)
+if (len(sys.argv) > 2):
+    # read in the csv file that contains cis
+    cis_filename = sys.argv[1]
+    cis_list = read_in_csv(cis_filename)
+
+    # read in the csv file that contains trans 
+    trans_filename = sys.argv[2]
+    trans_list = read_in_csv(trans_filename)
 
 
 
 
-num = len(test_split(cis_list,trans_list))
-print(num)
-out_file_lst = file_suffix_name(num)
-print(out_file_lst)
-# print(trans_list)
+    num = len(test_split(cis_list,trans_list))
+    print(num)
+    out_file_lst = file_suffix_name(num)
+    print(out_file_lst)
+    # print(trans_list)
 
-# print(file_list[0][0])
+    # print(file_list[0][0])
 
-for i,a in enumerate(out_file_lst):
-    out_file_name = 'temp_rand_' + a + '.csv'
-    file_lst = test_split(cis_list,trans_list)
-    file = final_out(file_lst,i)
-    sys.stdout = open(out_file_name, 'w')
-    print(file)
-    sys.stdout.close()
+    for i,a in enumerate(out_file_lst):
+        out_file_name = 'temp_rand_' + a + '.csv'
+        file_lst = test_split(cis_list,trans_list)
+        file = final_out(file_lst,i)
+        sys.stdout = open(out_file_name, 'w')
+        print(file)
+        sys.stdout.close()
 
