@@ -115,7 +115,7 @@ then
             if [ "$REZ" -eq "1" ]
             then
                 echo "$pdb_name has resolution of $REZ "
-                echo -n " $pdb_name" >> pdb_list.txt
+                echo -n " $pdb_name" >> $FILE_OUTPUT
             fi
 
         fi
