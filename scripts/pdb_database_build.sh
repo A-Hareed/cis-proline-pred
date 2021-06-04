@@ -126,9 +126,9 @@ then
         if [ "$pdbstatus" = "OK" ]
         then
             echo "The pdb $pdb_name is OK to use"
-            rezpdb=`getresol $file | awk '{print $2}' | awk -F'/' '{print $1}'`
+            # rezpdb=`getresol $file | awk '{print $2}' | awk -F'/' '{print $1}'`
             # check if its less than 3
-            REZ=`echo $rezpdb '<=' 3.00 | bc -l`
+            ##REZ=`echo $rezpdb '<=' 3.00 | bc -l`
 
             # if [ "$REZ" -eq "1" ]
             # then
