@@ -130,19 +130,19 @@ then
             # check if its less than 3
             REZ=`echo $rezpdb '<=' 3.00 | bc -l`
 
-            if [ "$REZ" -eq "1" ]
+            # if [ "$REZ" -eq "1" ]
+            # then
+            #     echo "$pdb_name has resolution of $REZ "
+            #     echo -n " $pdb_name" >> $FILE_OUTPUT
+
+            if [[ $torsion ]]
             then
-                echo "$pdb_name has resolution of $REZ "
-                echo -n " $pdb_name" >> $FILE_OUTPUT
-
-                 if [[ $torsion ]]
-                 then
-                     echo "torsion file name $TOR_OUTPUT"
-                     pdbtorsions $file > $torsion/"$pdb_name"_torsion.txt
-                fi
-
-
+                echo "torsion file name $TOR_OUTPUT"
+                pdbtorsions $file > $torsion/"$pdb_name"_torsion.txt
             fi
+
+
+            # fi
 
         fi
     done
