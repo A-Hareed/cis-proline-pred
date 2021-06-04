@@ -61,7 +61,7 @@ do
         
         [?]) printf >&2 "###############################################
 ###############################################
-                        program: pdb_database_build \n \t\t\t by: Ayub Hareed \n flags: \n \t\t -t carries out pdbtorsion on pdb files \n \t\t -f pdb file  
+                        program: pdb_database_build \n \t\t\t by: Ayub Hareed \n flags: \n \t\t -t [OUTPUT path] carries out pdbtorsion on pdb files \n \t\t -f pdb file  
                  -o [output name] output file for pdb list name \n
                  -e [pdb file prefix] used to loop through pdb file prefix e.g. '.ent' \n
                  -d directory path where the pdb file is \n\n"; exit
@@ -130,9 +130,11 @@ then
                 echo "$pdb_name has resolution of $REZ "
                 echo -n " $pdb_name" >> $FILE_OUTPUT
 
-                # if [[ $torsion ]]
-                # then
-                #     echo "torsion"
+                 if [[ $torsion ]]
+                 then
+                     echo "torsion file name $TOR_OUTPUT"
+                     pdbtorsions $file > $torsion/"$file"_torsion.txt
+                fi
 
 
             fi
