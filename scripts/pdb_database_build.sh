@@ -98,7 +98,7 @@ echo "Full Name: $fullname";
 if [[ $DIR_name ]]
 then
     echo "################################### $DIR_name"
-    for file in $DIR_name/*.pdb
+    for file in $DIR_name/*.ent
     do
         pdbstatus=`checkpdb $file`
         pdb_name=`basename $file .pdb`
