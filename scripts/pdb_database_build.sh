@@ -81,12 +81,11 @@ fi
 if [[ $EXTENSION ]] && [[ $EXTENSION != "*"  ]]
 then 
     echo "PDB File EXTENSION : $EXTENSION";
-    FILE_EXTENSION="$EXTENSION"
 
 elif [[ $EXTENSION = "*" ]]
 then 
     echo "extension is : $EXTENSION"
-    FILE_EXTENSION=" "
+    EXTENSION=" "
 else
     EXTENSION='.ent'
 fi
@@ -118,7 +117,7 @@ then
     for file in $DIR_name/*$EXTENSION
     do
         pdbstatus=`checkpdb $file`
-        pdb_name=`basename $file $FILE_EXTENSION`
+        pdb_name=`basename $file $EXTENSION`
         echo "################## $pdb_name ################################"
 
         echo "$pdbstatus"
