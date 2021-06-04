@@ -90,14 +90,14 @@ then
         echo "$okcheck"
         if [ "$pdbstatus" = "OK" ]
         then
-            echo "The pdb 2h03 is OK to use"
+            echo "The pdb $pdb_name is OK to use"
             rezpdb=`getresol $file | awk '{print $2}' | awk -F'/' '{print $1}'`
             # check if its less than 3
             REZ=`echo $rezpdb '<=' 3.00 | bc -l`
 
             if [ "$REZ" -eq "1" ]
             then
-                echo "it works"
+                echo "$pdb_name has resolution of $REZ "
                 echo -n " $pdb_name" >> pdb_list.txt
             fi
 
