@@ -49,7 +49,7 @@
 
 
 
-while getopts h:t:f:d:o: flag
+while getopts h:t:f:d:o:e: flag
 do
     case "${flag}" in
         h) help_input="RUN";;
@@ -57,11 +57,13 @@ do
         f) fullname=${OPTARG};;
         d) DIR_name="${OPTARG}";;
         o) FILE_OUTPUT=${OPTARG};;
+        e) EXTENSION=${OPTARG};;
         
         [?]) printf >&2 "###############################################
 ###############################################
                         program: pdb_database_build \n \t\t\t by: Ayub Hareed \n flags: \n \t\t -t carries out pdbtorsion on pdb files \n \t\t -f pdb file  
                  -o [output name] output file for pdb list name \n
+                 -e [pdb file prefix] used to loop through pdb file prefix e.g. '.ent' \n
                  -d directory path where the pdb file is \n\n"; exit
 
 
@@ -74,6 +76,15 @@ then
 else
     printf "\nNo file output name given for the preprocessed pdb_list \n\n"; exit
 fi
+
+if [[ $EXTENSION ]]
+then 
+    echo "PDB File EXTENSION : $EXTENSION";
+
+else
+    EXTENSION='.ent'
+fi
+
 
 
 # when -h flag is used the user guid text is printed ou
@@ -98,7 +109,7 @@ echo "Full Name: $fullname";
 if [[ $DIR_name ]]
 then
     echo "################################### $DIR_name"
-    for file in $DIR_name/*.ent
+    for file in $DIR_name/*$EXTENSION
     do
         pdbstatus=`checkpdb $file`
         pdb_name=`basename $file .pdb`
@@ -118,6 +129,12 @@ then
             then
                 echo "$pdb_name has resolution of $REZ "
                 echo -n " $pdb_name" >> $FILE_OUTPUT
+
+                # if [[ $torsion ]]
+                # then
+                #     echo "torsion"
+
+
             fi
 
         fi
