@@ -112,7 +112,7 @@ then
     for file in $DIR_name/*$EXTENSION
     do
         pdbstatus=`checkpdb $file`
-        pdb_name=`basename $file .pdb`
+        pdb_name=`basename $file $EXTENSION`
         echo "$pdb_name ################################"
 
         echo "$pdbstatus"
