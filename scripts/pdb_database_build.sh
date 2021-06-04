@@ -61,7 +61,7 @@ do
         [?]) printf >&2 "###############################################
 ###############################################
                         program: pdb_database_build \n \t\t\t by: Ayub Hareed \n flags: \n \t\t -t carries out pdbtorsion on pdb files \n \t\t -f pdb file  
-                 -o [output name] output file for pdb list name \n\n
+                 -o [output name] output file for pdb list name \n
                  -d directory path where the pdb file is \n\n"; exit
 
 
