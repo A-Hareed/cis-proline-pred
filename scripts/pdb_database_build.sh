@@ -133,7 +133,7 @@ then
                  if [[ $torsion ]]
                  then
                      echo "torsion file name $TOR_OUTPUT"
-                     pdbtorsions $file > $torsion/"$file"_torsion.txt
+                     pdbtorsions $file > $torsion/"$pdb_name"_torsion.txt
                 fi
 
 
