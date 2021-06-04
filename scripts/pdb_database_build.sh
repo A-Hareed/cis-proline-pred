@@ -77,10 +77,16 @@ else
     printf "\nNo file output name given for the preprocessed pdb_list \n\n"; exit
 fi
 
-if [[ $EXTENSION ]]
+
+if [[ $EXTENSION ]] && [[ $EXTENSION != "*"  ]]
 then 
     echo "PDB File EXTENSION : $EXTENSION";
+    FILE_EXTENSION="$EXTENSION"
 
+elif [[ $EXTENSION = "*" ]]
+then 
+    echo "extension is : $EXTENSION"
+    FILE_EXTENSION=" "
 else
     EXTENSION='.ent'
 fi
@@ -112,12 +118,12 @@ then
     for file in $DIR_name/*$EXTENSION
     do
         pdbstatus=`checkpdb $file`
-        pdb_name=`basename $file $EXTENSION`
-        echo "$pdb_name ################################"
+        pdb_name=`basename $file $FILE_EXTENSION`
+        echo "################## $pdb_name ################################"
 
         echo "$pdbstatus"
         okcheck="OK"
-        echo "$okcheck"
+        #echo "$okcheck"
         if [ "$pdbstatus" = "OK" ]
         then
             echo "The pdb $pdb_name is OK to use"
