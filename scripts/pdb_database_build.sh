@@ -52,13 +52,13 @@
 while getopts h:t:f:d: flag
 do
     case "${flag}" in
-        h) username=${OPTARG};;
+        h) help_input="RUN";;
         t) age=${OPTARG};;
         f) fullname=${OPTARG};;
         d) DIR_name="${OPTARG}";;
         [?]) printf >&2 "###############################################
 ###############################################
-                        program: pdb_database_build \n flags: \n \t\t -t carries out pdbtorsion on pdb files \n \t\t -f pdb file  
+                        program: pdb_database_build \n \t\t\t by: Ayub Hareed \n flags: \n \t\t -t carries out pdbtorsion on pdb files \n \t\t -f pdb file  
                  -d directory path where the pdb file is \n\n"; exit
 
     esac
@@ -67,6 +67,14 @@ done
 if [[ $username ]]
 then 
     echo "Username: $username";
+fi
+# when -h flag is used the user guid text is printed ou
+if [[ $help_input ]]
+then 
+    printf  "###############################################
+###############################################
+                        program: pdb_database_build \n flags: \n \t\t -t carries out pdbtorsion on pdb files \n \t\t -f pdb file  
+                 -d directory path where the pdb file is \n\n"; exit
 fi
 
 echo "Age: $age";
