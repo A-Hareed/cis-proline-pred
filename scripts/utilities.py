@@ -47,15 +47,17 @@
 #   V1.0   01.05.21  Original   By: Ayub Hareed
 #*************************************************************************
 # import libraries 
-import sys
 import os
-import inspect
+
 
 # import config
 
 # file path configuration
-print(inspect.getfile(inspect.currentframe()))
-print(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe() ) ) ) )
+file_path = os.path.realpath(__file__)
+#print(file_path)
+dir_path = os.path.dirname(file_path)
+os.chdir(dir_path)
+print(os.getcwd())
 
 
 #*************************************************************************
