@@ -57,8 +57,6 @@ file_path = os.path.realpath(__file__)
 #print(file_path)
 dir_path = os.path.dirname(file_path)
 os.chdir(dir_path)
-print(os.getcwd())
-
 
 #*************************************************************************
 # protein one letter code look up table
