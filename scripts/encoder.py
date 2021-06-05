@@ -117,12 +117,7 @@ if(len(sys.argv) == 4):
 if(sys.argv[1] == '-b45'):
     blosum45 = utilities.Encode('../encoder_data/BLOSUM45', 'blosum45')
     encoder = blosum45.get_encode_dict()
-    # changes######################################
-    file_path = os.path.realpath(sys.argv[2])
-    proline_csv_file = file_path
-    
-    #proline_csv_file = sys.argv[2]
-    ################################################
+    proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
     header = csv_header(20,window) 
     print('pbd,atom num,type{}'.format(header)) 
@@ -132,12 +127,7 @@ if(sys.argv[1] == '-b45'):
 if(sys.argv[1] == '-b62'):
     blosum62 = utilities.Encode('../encoder_data/BLOSUM62', 'blosum62')
     encoder = blosum62.get_encode_dict()
-    # changes######################################
-    file_path = os.path.realpath(sys.argv[2])
-    proline_csv_file = file_path
-
-    #proline_csv_file = sys.argv[2]
-    ################################################
+    proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
     header = csv_header(20, window)
     print('pbd,atom num,type{}'.format(header))
@@ -147,12 +137,7 @@ if(sys.argv[1] == '-b62'):
 if(sys.argv[1] == '-b80'):
     blosum80 = utilities.Encode('../encoder_data/BLOSUM80', 'blosum80')
     encoder = blosum80.get_encode_dict()
-    # changes######################################
-    file_path = os.path.realpath(sys.argv[2])
-    proline_csv_file = file_path
-
-    #proline_csv_file = sys.argv[2]
-    ################################################
+    proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
     header = csv_header(20, window)
     print('pbd,atom num,type{}'.format(header))
@@ -162,12 +147,7 @@ if(sys.argv[1] == '-b80'):
 if(sys.argv[1] == '-b90'):
     blosum90 = utilities.Encode('../encoder_data/BLOSUM90', 'blosum90')
     encoder = blosum90.get_encode_dict()
-    # changes######################################
-    file_path = os.path.realpath(sys.argv[2])
-    proline_csv_file = file_path
-
-    #proline_csv_file = sys.argv[2]
-    ################################################
+    proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
     header = csv_header(20, window)
     print('pbd,atom num,type{}'.format(header))
@@ -177,12 +157,7 @@ if(sys.argv[1] == '-b90'):
 if(sys.argv[1] == '-t5'):
     tscale5 = utilities.Encode('../encoder_data/TScale5.txt', 'tscale5')
     encoder = tscale5.get_encode_dict()
-    # changes######################################
-    file_path = os.path.realpath(sys.argv[2])
-    proline_csv_file = file_path
-
-    #proline_csv_file = sys.argv[2]
-    ################################################
+    proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
     header = csv_header(5, window)
     print('pbd,atom num,type{}'.format(header))
@@ -192,12 +167,7 @@ if(sys.argv[1] == '-t5'):
 if(sys.argv[1] == '-a4'):
     abhinandan4 = utilities.Encode('../encoder_data/Abhinandan4.txt', 'abhinandan4') 
     encoder = abhinandan4.get_encode_dict()
-    # changes######################################
-    file_path = os.path.realpath(sys.argv[2])
-    proline_csv_file = file_path
-
-    #proline_csv_file = sys.argv[2]
-    ################################################
+    proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
     header = csv_header(4, window)
     print('pbd,atom num,type{}'.format(header))
