@@ -111,6 +111,8 @@ window = 3
 if(len(sys.argv) == 4):
     window = int(sys.argv[3])
 
+# call for utilites folder 
+execfile("utilities.py")
 # using blosum45 as encoder
 if(sys.argv[1] == '-b45'):
     blosum45 = utilities.Encode('../encoder_data/BLOSUM45', 'blosum45')

@@ -47,10 +47,19 @@
 #   V1.0   01.05.21  Original   By: Ayub Hareed
 #*************************************************************************
 # import libraries 
+import sys
+import os
+import inspect
+
 # import config
 
+# file path configuration
+print(inspect.getfile(inspect.currentframe()))
+print(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe() ) ) ) )
 
-# protein one letter code look up table 
+
+#*************************************************************************
+# protein one letter code look up table
 prot_seq = {'ALA': 'A', 'ARG': 'R', 'ASN': 'N','ASP': 'D', 'CYS': 'C',
             'GLU': 'E', 'GLN': 'Q', 'GLY': 'G', 'HIS': 'H', 'ILE': 'I',
             'LEU': 'L', 'LYS': 'K', 'MET': 'M', 'PHE': 'F', 'PRO': 'P',
