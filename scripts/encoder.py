@@ -36,8 +36,9 @@
 import sys
 import utilities
 import string
+import os 
 
-
+print(os.getcwd())
 #*************************************************************************
 # function reads in the file
 def read_csv_file(filename):
