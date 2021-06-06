@@ -49,7 +49,7 @@
 
 
 
-while getopts h:t:f:d:o:e:p: flag
+while getopts h:t:f:d:o:e:p:x: flag
 do
     case "${flag}" in
         h) help_input="RUN";;
