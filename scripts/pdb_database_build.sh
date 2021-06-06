@@ -172,7 +172,7 @@ echo "start code"
 ###########################################################################
 echo "####################################################"
 echo "####################################################"
-for num in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+for num in 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
 do
     /home/ayubh/project/git_clone/cis-proline-pred/scripts/./getpro_py.py -d $torsion $num > $CURRENT_DIRECTORY/temp.csv
     CurrentEncode=-"$ENCODER"
@@ -187,7 +187,7 @@ do
     head -n 1 temp_encoded.csv | awk -F',' '{for(i=4;i<=NF;++i)print $i}' > inputs.txt
     echo "####################################################"
     echo "####################################################"
-    echo "start machine learning"
+    echo "start machine learning model ${num}..........."
     csv2arff -ni inputs.txt type temp_encoded.csv > temp.arff
     java $CLASSIFIER -d final_${ENCODER}_${num}.model -t temp.arff  > final_${ENCODER}_${num}.out
 
