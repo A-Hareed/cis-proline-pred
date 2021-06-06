@@ -49,13 +49,13 @@ def find_pdb(quiery, pdb_dataset):
 #***********************************************
 #       main program
 #***********************************************
-if (len(sys.argv) > 2):
-    quiery_file = sys.argv[1]
-    quiery_raw = read_file(quiery_file)
-    database = read_file(sys.argv[2])
+if (len(sys.argv) >= 2):
+    #quiery_file = sys.argv[2]
+    #quiery_raw = read_file(quiery_file)
+    database = read_file(sys.argv[1])
     cleaned_dataset = get_pdd_name(database)
    # print(len(cleaned_dataset))
-    quiery = find_pdb(quiery_raw, cleaned_dataset)
+    #quiery = find_pdb(quiery_raw, cleaned_dataset)
     #print(f"final out put len: {len(quiery)}")
     clean_clean = ["pdb" + i[:4].lower() for i in cleaned_dataset]
     result = ""
