@@ -72,12 +72,12 @@ do
     esac
 done
 
-if [[ $FILE_OUTPUT ]]
-then 
-    echo "File output : $FILE_OUTPUT";
-else
-    printf "\nNo file output name given for the preprocessed pdb_list \n\n"; exit
-fi
+# if [[ $FILE_OUTPUT ]]
+# then 
+#     echo "File output : $FILE_OUTPUT";
+# else
+#     printf "\nNo file output name given for the preprocessed pdb_list \n\n"; exit
+# fi
 
 
 if [[ $EXTENSION ]] && [[ $EXTENSION != "*"  ]]
