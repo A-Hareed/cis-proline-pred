@@ -196,7 +196,8 @@ do
     echo "time to remove temp files"
     rm temp*
     rm inputs.txt
-
+    echo "Machine learning finished"
+    cat final_${ENCODER}_${num}.out | grep -A 20 Stratified | grep Weighted | awk 'BEGIN {sum=0; fold=0} {sum+=$8; fold++} END {print "Mean MCC: " sum/fold}'
 
 done
 
