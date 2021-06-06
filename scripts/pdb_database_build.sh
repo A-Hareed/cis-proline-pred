@@ -49,7 +49,7 @@
 
 
 
-while getopts h:t:f:d:o:e: flag
+while getopts h:t:f:d:o:e:p: flag
 do
     case "${flag}" in
         h) help_input="RUN";;
@@ -58,6 +58,8 @@ do
         d) DIR_name="${OPTARG}";;
         o) FILE_OUTPUT=${OPTARG};;
         e) EXTENSION=${OPTARG};;
+        p) PDBDATA=${OPTARG};;
+        x) ENCODER=${OPTARG};;
         
         [?]) printf >&2 "###############################################
 ###############################################
@@ -107,49 +109,89 @@ fi
 echo "Age: $age";
 echo "Full Name: $fullname";
 #echo "directory: $DIR_name"
+culled_pdb_array=(`/home/ayubh/project/git_clone/cis-proline-pred/scripts/getpdb.py $PDBDATA`)
 
-
-
+CURRENT_DIRECTORY=`pwd`
+echo "####################################################"
+echo "the current working directory is: $CURRENT_DIRECTORY"
+echo "####################################################"
+echo "####################################################"
 
 if [[ $DIR_name ]]
 then
     echo "################################### $DIR_name"
     for file in $DIR_name/*$EXTENSION
     do
-        pdbstatus=`checkpdb $file`
+        #pdbstatus=`checkpdb $file`
         pdb_name=`basename $file $EXTENSION`
         echo "################## $pdb_name ################################"
 
         echo "$pdbstatus"
         okcheck="OK"
-        #echo "$okcheck"
-        if [ "$pdbstatus" = "OK" ]
-        then
-            echo "The pdb $pdb_name is OK to use"
-            # rezpdb=`getresol $file | awk '{print $2}' | awk -F'/' '{print $1}'`
-            # check if its less than 3
-            ##REZ=`echo $rezpdb '<=' 3.00 | bc -l`
-
-            # if [ "$REZ" -eq "1" ]
-            # then
-            #     echo "$pdb_name has resolution of $REZ "
-            #     echo -n " $pdb_name" >> $FILE_OUTPUT
-
-            if [[ $torsion ]]
+        
+        #if [ "$pdbstatus" = "OK" ]
+        for culled_pdb in ${culled_pdb_array[@]}
+        do
+            if [ [$culled_pdb = $pdb_name ] ]
             then
-                echo "torsion file name $TOR_OUTPUT"
-                pdbtorsions $file > $torsion/"$pdb_name"_torsion.txt
+                echo "The pdb $pdb_name is equal to $culled_pdb"
+                # rezpdb=`getresol $file | awk '{print $2}' | awk -F'/' '{print $1}'`
+                # check if its less than 3
+                ##REZ=`echo $rezpdb '<=' 3.00 | bc -l`
+
+                # if [ "$REZ" -eq "1" ]
+                # then
+                #     echo "$pdb_name has resolution of $REZ "
+                #     echo -n " $pdb_name" >> $FILE_OUTPUT
+
+                if [[ $torsion ]]
+                then
+                    echo "torsion file name $TOR_OUTPUT"
+                    pdbtorsions $file > $torsion/${pdb_name}_torsion.txt
+                fi
+
+
+                # fi
+
             fi
-
-
-            # fi
-
-        fi
     done
 
 
 fi
 echo "start code"
+
+##########################################################################
+#   carry out proline dataset extraction and machine learning
+###########################################################################
+echo "####################################################"
+echo "####################################################"
+for num in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+do
+    /home/ayubh/project/git_clone/cis-proline-pred/scripts/getpro_py.py -d $torsion $num > $CURRENT_DIRECTORY/temp.csv
+    CurrentEncode=-"$ENCODER"
+    cd "$CURRENT_DIRECTORY"
+    echo "####################################################"
+    pwd
+    /home/ayubh/project/git_clone/cis-proline-pred/scripts/encoder.py $CurrentEncode $CURRENT_DIRECTORY/temp.csv $num > $CURRENT_DIRECTORY/temp_encoded.csv
+    cd "$CURRENT_DIRECTORY"
+    echo "####################################################"
+    pwd
+    head -n 1 temp_encoded.csv | awk -F',' '{for(i=4;i<=NF;++i)print $i}' > inputs.txt
+    echo "####################################################"
+    echo "####################################################"
+    echo "start machine learning"
+    csv2arff -ni inputs.txt type temp_encoded.csv > temp.arff
+    java $CLASSIFIER -d final_${ENCODER}_${num}.model -t temp.arff  > final_${ENCODER}_${num}.out
+
+    echo "####################################################"
+    echo "####################################################"
+    echo "time to remove temp files"
+    rm temp*
+
+
+done
+
+
 
 # for i in "${ourlsts[@]}"
 # do 
