@@ -175,7 +175,7 @@ do
     cd "$CURRENT_DIRECTORY"
     echo "####################################################"
     pwd
-    /home/ayubh/project/git_clone/cis-proline-pred/scripts/./encoder.py $CurrentEncode $CURRENT_DIRECTORY/temp.csv $num > $CURRENT_DIRECTORY/temp_encoded.csv
+    time /home/ayubh/project/git_clone/cis-proline-pred/scripts/./encoder.py $CurrentEncode $CURRENT_DIRECTORY/temp.csv $num > $CURRENT_DIRECTORY/temp_encoded.csv
     echo "encoder DONE!!!!!!!!! \n\n"
     cd "$CURRENT_DIRECTORY"
     echo "####################################################"
