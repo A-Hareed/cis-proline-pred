@@ -146,16 +146,17 @@ do
         #     echo "$pdb_name has resolution of $REZ "
         #     echo -n " $pdb_name" >> $FILE_OUTPUT
 
-        if [[ $torsion ]]
-        then
-            echo "torsion file name $TOR_OUTPUT"
-            pdbtorsions $pdb_name_file > $torsion/${culled_pdb}_torsion.txt
-        fi
+    if [[ $torsion ]]
+    then
+        echo "torsion file name $TOR_OUTPUT"
+        pdbtorsions $pdb_name_file > $torsion/${culled_pdb}_torsion.txt
+    fi
 
 
         # fi
+        
+    # fi
 
-    fi
 done
     # done
 
