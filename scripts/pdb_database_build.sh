@@ -117,48 +117,50 @@ echo "the current working directory is: $CURRENT_DIRECTORY"
 echo "####################################################"
 echo "####################################################"
 
-if [[ $DIR_name ]]
-then
-    echo "################################### $DIR_name"
-    for file in $DIR_name/*$EXTENSION
-    do
-        #pdbstatus=`checkpdb $file`
-        pdb_name=`basename $file $EXTENSION`
-        echo "################## $pdb_name ################################"
+# if [[ $DIR_name ]]
+# then
+#     echo "################################### $DIR_name"
+#     for file in $DIR_name/*$EXTENSION
+#     do
+#         #pdbstatus=`checkpdb $file`
+#         pdb_name=`basename $file $EXTENSION`
+#         echo "################## $pdb_name ################################"
 
-        echo "$pdbstatus"
-        okcheck="OK"
+#         echo "$pdbstatus"
+#         okcheck="OK"
         
-        #if [ "$pdbstatus" = "OK" ]
-        for culled_pdb in ${culled_pdb_array[@]}
-        do
-            if [ [$culled_pdb = $pdb_name ] ]
-            then
-                echo "The pdb $pdb_name is equal to $culled_pdb"
-                # rezpdb=`getresol $file | awk '{print $2}' | awk -F'/' '{print $1}'`
-                # check if its less than 3
-                ##REZ=`echo $rezpdb '<=' 3.00 | bc -l`
+#         #if [ "$pdbstatus" = "OK" ]
+for culled_pdb in ${culled_pdb_array[@]}
+do
+    echo "$culled_pdb"
+    pdb_name_file=$DIR_name/${culled_pdb}.ent
+    # if [ [$culled_pdb = $pdb_name ] ]
+    # then
+    echo "The pdb $pdb_name is equal to $culled_pdb"
+        # rezpdb=`getresol $file | awk '{print $2}' | awk -F'/' '{print $1}'`
+        # check if its less than 3
+        ##REZ=`echo $rezpdb '<=' 3.00 | bc -l`
 
-                # if [ "$REZ" -eq "1" ]
-                # then
-                #     echo "$pdb_name has resolution of $REZ "
-                #     echo -n " $pdb_name" >> $FILE_OUTPUT
+        # if [ "$REZ" -eq "1" ]
+        # then
+        #     echo "$pdb_name has resolution of $REZ "
+        #     echo -n " $pdb_name" >> $FILE_OUTPUT
 
-                if [[ $torsion ]]
-                then
-                    echo "torsion file name $TOR_OUTPUT"
-                    pdbtorsions $file > $torsion/${pdb_name}_torsion.txt
-                fi
-
-
-                # fi
-
-            fi
-        done
-    done
+        if [[ $torsion ]]
+        then
+            echo "torsion file name $TOR_OUTPUT"
+            pdbtorsions $pdb_name_file > $torsion/${culled_pdb}_torsion.txt
+        fi
 
 
-fi
+        # fi
+
+    fi
+done
+    # done
+
+
+# fi
 echo "start code"
 
 ##########################################################################
