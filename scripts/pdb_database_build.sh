@@ -117,8 +117,8 @@ echo "the current working directory is: $CURRENT_DIRECTORY"
 echo "####################################################"
 echo "####################################################"
 
-# if [[ $DIR_name ]]
-# then
+if [[ $DIR_name ]]
+then
 #     echo "################################### $DIR_name"
 #     for file in $DIR_name/*$EXTENSION
 #     do
@@ -130,38 +130,37 @@ echo "####################################################"
 #         okcheck="OK"
         
 #         #if [ "$pdbstatus" = "OK" ]
-for culled_pdb in ${culled_pdb_array[@]}
-do
-    echo "$culled_pdb"
-    pdb_name_file=$DIR_name/${culled_pdb}.ent
-    # if [ [$culled_pdb = $pdb_name ] ]
-    # then
-    echo "The pdb $pdb_name is equal to $culled_pdb"
-        # rezpdb=`getresol $file | awk '{print $2}' | awk -F'/' '{print $1}'`
-        # check if its less than 3
-        ##REZ=`echo $rezpdb '<=' 3.00 | bc -l`
-
-        # if [ "$REZ" -eq "1" ]
+    for culled_pdb in ${culled_pdb_array[@]}
+    do
+        echo "$culled_pdb"
+        pdb_name_file=$DIR_name/${culled_pdb}.ent
+        # if [ [$culled_pdb = $pdb_name ] ]
         # then
-        #     echo "$pdb_name has resolution of $REZ "
-        #     echo -n " $pdb_name" >> $FILE_OUTPUT
+        echo "The pdb $pdb_name is equal to $culled_pdb"
+            # rezpdb=`getresol $file | awk '{print $2}' | awk -F'/' '{print $1}'`
+            # check if its less than 3
+            ##REZ=`echo $rezpdb '<=' 3.00 | bc -l`
 
-    if [[ $torsion ]]
-    then
-        echo "torsion file name $TOR_OUTPUT"
-        pdbtorsions $pdb_name_file > $torsion/${culled_pdb}_torsion.txt
-    fi
+            # if [ "$REZ" -eq "1" ]
+            # then
+            #     echo "$pdb_name has resolution of $REZ "
+            #     echo -n " $pdb_name" >> $FILE_OUTPUT
+
+        if [[ $torsion ]]
+        then
+            echo "torsion file name $TOR_OUTPUT"
+            pdbtorsions $pdb_name_file > $torsion/${culled_pdb}_torsion.txt
+        fi
 
 
+            # fi
+            
         # fi
-        
-    # fi
 
-done
+    done
     # done
 
-
-# fi
+fi
 echo "start code"
 
 ##########################################################################
