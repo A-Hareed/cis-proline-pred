@@ -171,12 +171,12 @@ echo "####################################################"
 echo "####################################################"
 for num in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
 do
-    /home/ayubh/project/git_clone/cis-proline-pred/scripts/getpro_py.py -d $torsion $num > $CURRENT_DIRECTORY/temp.csv
+    /home/ayubh/project/git_clone/cis-proline-pred/scripts/./getpro_py.py -d $torsion $num > $CURRENT_DIRECTORY/temp.csv
     CurrentEncode=-"$ENCODER"
     cd "$CURRENT_DIRECTORY"
     echo "####################################################"
     pwd
-    /home/ayubh/project/git_clone/cis-proline-pred/scripts/encoder.py $CurrentEncode $CURRENT_DIRECTORY/temp.csv $num > $CURRENT_DIRECTORY/temp_encoded.csv
+    /home/ayubh/project/git_clone/cis-proline-pred/scripts/./encoder.py $CurrentEncode $CURRENT_DIRECTORY/temp.csv $num > $CURRENT_DIRECTORY/temp_encoded.csv
     cd "$CURRENT_DIRECTORY"
     echo "####################################################"
     pwd
