@@ -79,6 +79,10 @@ done
 #     printf "\nNo file output name given for the preprocessed pdb_list \n\n"; exit
 # fi
 
+echo "####exporting weka#######"
+export WEKA=/nas/backup/work/newserver/bsmhome/zcbthhn/weka-3-8-3
+export CLASSPATH="$WEKA/weka.jar"
+export CLASSIFIER=weka.classifiers.functions.MultilayerPerceptron
 
 if [[ $EXTENSION ]] && [[ $EXTENSION != "*"  ]]
 then 
