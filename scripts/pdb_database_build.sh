@@ -197,7 +197,7 @@ do
     
     for radfile in temp_rand*
     do
-        rad_name = `basename $radfile .csv`
+        rad_name=`basename $radfile .csv`
         echo "rad name $rad_name"
         csv2arff -ni inputs.txt type $radfile > $rad_name.arff
         java $CLASSIFIER -d ${rad_name}_${ENCODER}_${num}.model -t $rad_name.arff  > ${rad_name}_${ENCODER}_${num}.out
