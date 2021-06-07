@@ -180,11 +180,11 @@ do
     echo "####################################################"
     pwd
     time /home/ayubh/project/git_clone/cis-proline-pred/scripts/./encoder.py $CurrentEncode $CURRENT_DIRECTORY/temp.csv $num > $CURRENT_DIRECTORY/temp_encoded.csv
+    # create several csv files with equal amount cis and trans
+
     head -n 1 temp_encoded.csv > $CURRENT_DIRECTORY/temp_cis.csv
     grep "cis" $CURRENT_DIRECTORY/temp_encoded.csv >> $CURRENT_DIRECTORY/temp_cis.csv
     grep "trans" $CURRENT_DIRECTORY/temp_encoded.csv > $CURRENT_DIRECTORY/temp_trans.csv
-    # create several csv files with equal amount cis and trans
-
     echo "encoder DONE!!!!!!!!! \n\n"
     cd "$CURRENT_DIRECTORY"
     /home/ayubh/project/git_clone/cis-proline-pred/scripts/./join_cis_trans.py $CURRENT_DIRECTORY/temp_cis.csv $CURRENT_DIRECTORY/temp_trans.csv
