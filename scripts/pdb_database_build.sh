@@ -184,18 +184,23 @@ do
     grep "cis" $CURRENT_DIRECTORY/temp_encoded.csv >> $CURRENT_DIRECTORY/temp_cis.csv
     grep "trans" $CURRENT_DIRECTORY/temp_encoded.csv > $CURRENT_DIRECTORY/temp_trans.csv
     # create several csv files with equal amount cis and trans
-    /home/ayubh/project/git_clone/cis-proline-pred/scripts/./join_cis_trans.py $CURRENT_DIRECTORY/temp_cis.csv $CURRENT_DIRECTORY/temp_trans.csv
 
     echo "encoder DONE!!!!!!!!! \n\n"
     cd "$CURRENT_DIRECTORY"
+    /home/ayubh/project/git_clone/cis-proline-pred/scripts/./join_cis_trans.py $CURRENT_DIRECTORY/temp_cis.csv $CURRENT_DIRECTORY/temp_trans.csv
     echo "####################################################"
     pwd
     head -n 1 temp_encoded.csv | awk -F',' '{for(i=4;i<=NF;++i)print $i}' > inputs.txt
     echo "####################################################"
     echo "####################################################"
     echo "start machine learning model ${num}..........."
-    csv2arff -ni inputs.txt type temp_encoded.csv > temp.arff
-    java $CLASSIFIER -d final_${ENCODER}_${num}.model -t temp.arff  > final_${ENCODER}_${num}.out
+    
+    for radfile in temp_rand*
+    do
+        rad_name = `basename $radfile .csv`
+        echo "rad name $rad_name"
+        csv2arff -ni inputs.txt type $radfile > $rad_name.arff
+        java $CLASSIFIER -d ${rad_name}_${ENCODER}_${num}.model -t $rad_name.arff  > ${rad_name}_${ENCODER}_${num}.out
 
     echo "####################################################"
     echo "####################################################"
@@ -203,8 +208,8 @@ do
     rm temp*
     rm inputs.txt
     echo "Machine learning finished"
-    cat *.out | grep -A 20 Stratified | grep Weighted
-    cat final_${ENCODER}_${num}.out | grep -A 20 Stratified | grep Weighted | awk 'BEGIN {sum=0; fold=0} {sum+=$8; fold++} END {print "Mean MCC: " sum/fold}'
+    cat final_${radfile}_${ENCODER}_${num}.out | grep -A 20 Stratified | grep Weighted
+    cat final_${radfile}_${ENCODER}_${num}.out | grep -A 20 Stratified | grep Weighted | awk 'BEGIN {sum=0; fold=0} {sum+=$8; fold++} END {print "Mean MCC: " sum/fold}'
 
 done
 
