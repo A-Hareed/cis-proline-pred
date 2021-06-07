@@ -172,7 +172,7 @@ echo "start code"
 ###########################################################################
 echo "####################################################"
 echo "####################################################"
-for num in 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+for num in 9 10
 do
     /home/ayubh/project/git_clone/cis-proline-pred/scripts/./getpro_py.py -d $torsion $num > $CURRENT_DIRECTORY/temp.csv
     CurrentEncode=-"$ENCODER"
@@ -197,6 +197,7 @@ do
     rm temp*
     rm inputs.txt
     echo "Machine learning finished"
+    cat *.out | grep -A 20 Stratified | grep Weighted
     cat final_${ENCODER}_${num}.out | grep -A 20 Stratified | grep Weighted | awk 'BEGIN {sum=0; fold=0} {sum+=$8; fold++} END {print "Mean MCC: " sum/fold}'
 
 done
