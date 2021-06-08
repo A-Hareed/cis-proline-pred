@@ -63,7 +63,17 @@ os.chdir(dir_path)
 prot_seq = {'ALA': 'A', 'ARG': 'R', 'ASN': 'N','ASP': 'D', 'CYS': 'C',
             'GLU': 'E', 'GLN': 'Q', 'GLY': 'G', 'HIS': 'H', 'ILE': 'I',
             'LEU': 'L', 'LYS': 'K', 'MET': 'M', 'PHE': 'F', 'PRO': 'P',
-            'SER': 'S', 'THR': 'T', 'TRP': 'W', 'TYR': 'Y', 'VAL': 'V'}
+            'SER': 'S', 'THR': 'T', 'TRP': 'W', 'TYR': 'Y', 'VAL': 'V',
+            'OBN': 'F', '2MR': 'R', 'ABA': 'A', 'ALY': 'K', 'AME': 'M',
+            'AYA': 'A', 'BFD': 'D', 'BLE': 'L', 'CAF': 'C', 'CAS': 'C',
+            'CME': 'C', 'CSD': 'C', 'CSO': 'C', 'CSP': 'C', 'CSX': 'C',
+            'CXM': 'M', 'FF9': 'K', 'FME': 'M', 'GFT': 'S', 'HIC': 'H',
+            'HSK': 'H', 'KCX': 'K', 'KPI': 'K', 'KYQ': 'K', 'LLP': 'K',
+            'LYR': 'K', 'M3L': 'K', 'MEN': 'N', 'MIR': 'S', 'MLY': 'K',
+            'MLZ': 'K', 'MSE': 'M', 'OCS': 'C', 'PCA': 'Q', 'PHD': 'D',
+            'PTR': 'Y', 'SAC': 'S', 'SCH': 'C', 'SEP': 'S', 'SGB': 'S',
+            'SMC': 'C', 'SME': 'M', 'SNC': 'C', 'SNM': 'S', 'SNN': 'N',
+            'SUN': 'S', 'SVX': 'S', 'TPO': 'T', 'TYS': 'Y', 'YTH': 'T'}
 
 #*************************************************************************
 def amino_acid_code_converter(amino_acid):
