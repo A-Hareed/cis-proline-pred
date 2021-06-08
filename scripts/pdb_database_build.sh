@@ -152,8 +152,19 @@ then
 
         if [[ $torsion ]]
         then
-            echo "torsion file name $TOR_OUTPUT"
-            pdbtorsions $pdb_name_file > $torsion/${culled_pdb}_torsion.txt
+            echo "chain extraction "
+            cleaned_culled_pdb="${culled_pdb#pdb}"
+            chain_name=`grep -i "${cleaned_culled_pdb}" cullpdb_pc25.0_res0.0-3.0_noBrks_noDsdr_len40-10000_R0.25_Xray_d2021_06_05_chains3940 | awk '{print $1}'`
+            chain_letter=${chain_name#"${cleaned_culled_pdb^^}"}
+            echo "chain letter is $chain_letter" 
+            pdbchain $chain_letter $pdb_name_file > $torsion/${culled_pdb}_chain.ent
+
+            echo "chain extracted to file $torsion/${culled_pdb}_chain.ent"
+            pdbtorsions $torsion/${culled_pdb}_chain.ent > $torsion/${culled_pdb}_torsion.txt
+            echo "torsion extraction done and removing chain files"
+            rm $torsion/${culled_pdb}_chain.ent
+
+            echo "chain extraction "
         fi
 
 
