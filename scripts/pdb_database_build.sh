@@ -217,8 +217,8 @@ then
             java $CLASSIFIER -d ${rad_name}_${ENCODER}_${num}.model -t $rad_name.arff  > ${rad_name}_${ENCODER}_${num}.out
 
             echo "Machine learning finished"
-            cat final_${radfile}_${ENCODER}_${num}.out | grep -A 20 Stratified | grep Weighted
-            cat final_${radfile}_${ENCODER}_${num}.out | grep -A 20 Stratified | grep Weighted | awk 'BEGIN {sum=0; fold=0} {sum+=$8; fold++} END {print "Mean MCC: " sum/fold}'
+            cat ${rad_name}_${ENCODER}_${num}.out | grep -A 20 Stratified | grep Weighted
+            cat ${rad_name}_${ENCODER}_${num}.out | grep -A 20 Stratified | grep Weighted | awk 'BEGIN {sum=0; fold=0} {sum+=$8; fold++} END {print "Mean MCC: " sum/fold}'
         done
         echo "####################################################"
         echo "####################################################"
