@@ -49,22 +49,22 @@ def find_pdb(quiery, pdb_dataset):
 #***********************************************
 #       main program
 #***********************************************
-if (len(sys.argv) >= 2):
-    quiery_file = sys.argv[2]
-    quiery_raw = read_file(quiery_file)
+if (len(sys.argv) >= 1):
+    # quiery_file = sys.argv[2]
+    # quiery_raw = read_file(quiery_file)
     database = read_file(sys.argv[1])
     cleaned_dataset = get_pdd_name(database)
    # print(len(cleaned_dataset))
-    quiery = find_pdb(quiery_raw, cleaned_dataset)
+    # quiery = find_pdb(quiery_raw, cleaned_dataset)
     clean_clean = ["pdb" + i[:4].lower() for i in cleaned_dataset]
     result = ""
     for i in clean_clean:
         result += i + " "
-    #print(result)
+    print(result)
     set1 = set(clean_clean)
-    set2 = set(quiery)
-    z = set1.difference(set2)
-    print(f"number of pdb files failed checkpdb: {len(z)} \n\n")
-    print(z)
+    # set2 = set(quiery)
+    # z = set1.difference(set2)
+    # print(f"number of pdb files failed checkpdb: {len(z)} \n\n")
+    # print(z)
     # print("ok")
     # print(quiery)
