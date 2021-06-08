@@ -49,7 +49,7 @@
 
 
 
-while getopts h:t:f:d:o:e:p:x: flag
+while getopts h:t:f:d:o:e:p:x:m: flag
 do
     case "${flag}" in
         h) help_input="RUN";;
@@ -60,6 +60,7 @@ do
         e) EXTENSION=${OPTARG};;
         p) PDBDATA=${OPTARG};;
         x) ENCODER=${OPTARG};;
+        m) MACHINELEARNING=${OPTARG};;
         
         [?]) printf >&2 "###############################################
 ###############################################
@@ -183,49 +184,50 @@ echo "start code"
 ###########################################################################
 echo "####################################################"
 echo "####################################################"
-for num in 9 10
-do
-    /home/ayubh/project/git_clone/cis-proline-pred/scripts/./getpro_py.py -d $torsion $num > $CURRENT_DIRECTORY/temp.csv
-    CurrentEncode=-"$ENCODER"
-    cd "$CURRENT_DIRECTORY"
-    echo "####################################################"
-    pwd
-    time /home/ayubh/project/git_clone/cis-proline-pred/scripts/./encoder.py $CurrentEncode $CURRENT_DIRECTORY/temp.csv $num > $CURRENT_DIRECTORY/temp_encoded.csv
-    # create several csv files with equal amount cis and trans
-
-    head -n 1 temp_encoded.csv > $CURRENT_DIRECTORY/temp_cis.csv
-    grep "cis" $CURRENT_DIRECTORY/temp_encoded.csv >> $CURRENT_DIRECTORY/temp_cis.csv
-    grep "trans" $CURRENT_DIRECTORY/temp_encoded.csv > $CURRENT_DIRECTORY/temp_trans.csv
-    echo "encoder DONE!!!!!!!!! \n\n"
-    cd "$CURRENT_DIRECTORY"
-    /home/ayubh/project/git_clone/cis-proline-pred/scripts/./join_cis_trans.py $CURRENT_DIRECTORY/temp_cis.csv $CURRENT_DIRECTORY/temp_trans.csv
-    echo "####################################################"
-    pwd
-    head -n 1 temp_encoded.csv | awk -F',' '{for(i=4;i<=NF;++i)print $i}' > inputs.txt
-    echo "####################################################"
-    echo "####################################################"
-    echo "start machine learning model ${num}..........."
-    
-    for radfile in temp_rand*
+if [[ $MACHINELEARNING ]]
+then
+    for num in 9 10
     do
-        rad_name=`basename $radfile .csv`
-        echo "rad name $rad_name"
-        csv2arff -ni inputs.txt type $radfile > $rad_name.arff
-        java $CLASSIFIER -d ${rad_name}_${ENCODER}_${num}.model -t $rad_name.arff  > ${rad_name}_${ENCODER}_${num}.out
+        /home/ayubh/project/git_clone/cis-proline-pred/scripts/./getpro_py.py -d $torsion $num > $CURRENT_DIRECTORY/temp.csv
+        CurrentEncode=-"$ENCODER"
+        cd "$CURRENT_DIRECTORY"
+        echo "####################################################"
+        pwd
+        time /home/ayubh/project/git_clone/cis-proline-pred/scripts/./encoder.py $CurrentEncode $CURRENT_DIRECTORY/temp.csv $num > $CURRENT_DIRECTORY/temp_encoded.csv
+        # create several csv files with equal amount cis and trans
 
-        echo "Machine learning finished"
-        cat final_${radfile}_${ENCODER}_${num}.out | grep -A 20 Stratified | grep Weighted
-        cat final_${radfile}_${ENCODER}_${num}.out | grep -A 20 Stratified | grep Weighted | awk 'BEGIN {sum=0; fold=0} {sum+=$8; fold++} END {print "Mean MCC: " sum/fold}'
+        head -n 1 temp_encoded.csv > $CURRENT_DIRECTORY/temp_cis.csv
+        grep "cis" $CURRENT_DIRECTORY/temp_encoded.csv >> $CURRENT_DIRECTORY/temp_cis.csv
+        grep "trans" $CURRENT_DIRECTORY/temp_encoded.csv > $CURRENT_DIRECTORY/temp_trans.csv
+        echo "encoder DONE!!!!!!!!! \n\n"
+        cd "$CURRENT_DIRECTORY"
+        /home/ayubh/project/git_clone/cis-proline-pred/scripts/./join_cis_trans.py $CURRENT_DIRECTORY/temp_cis.csv $CURRENT_DIRECTORY/temp_trans.csv
+        echo "####################################################"
+        pwd
+        head -n 1 temp_encoded.csv | awk -F',' '{for(i=4;i<=NF;++i)print $i}' > inputs.txt
+        echo "####################################################"
+        echo "####################################################"
+        echo "start machine learning model ${num}..........."
+        
+        for radfile in temp_rand*
+        do
+            rad_name=`basename $radfile .csv`
+            echo "rad name $rad_name"
+            csv2arff -ni inputs.txt type $radfile > $rad_name.arff
+            java $CLASSIFIER -d ${rad_name}_${ENCODER}_${num}.model -t $rad_name.arff  > ${rad_name}_${ENCODER}_${num}.out
+
+            echo "Machine learning finished"
+            cat final_${radfile}_${ENCODER}_${num}.out | grep -A 20 Stratified | grep Weighted
+            cat final_${radfile}_${ENCODER}_${num}.out | grep -A 20 Stratified | grep Weighted | awk 'BEGIN {sum=0; fold=0} {sum+=$8; fold++} END {print "Mean MCC: " sum/fold}'
+        done
+        echo "####################################################"
+        echo "####################################################"
+        echo "time to remove temp files"
+        rm temp*
+        rm inputs.txt
+
     done
-    echo "####################################################"
-    echo "####################################################"
-    echo "time to remove temp files"
-    rm temp*
-    rm inputs.txt
-
-done
-
-
+fi
 
 # for i in "${ourlsts[@]}"
 # do 
