@@ -215,13 +215,14 @@ def find_prolines(data, window):
 
     for line in data:
         # Ignore comment lines
-        if(line[0] != '#'):
-            fields = line.split()
-            if(fields[1] == 'PRO'):
-                result = process_a_proline(data, window, line_number)
-                if(result != ''):
-                    results.append(result)
-        line_number = line_number + 1
+        if (len(line) > 1):
+            if(line[0] != '#'):
+                fields = line.split()
+                if(fields[1] == 'PRO'):
+                    result = process_a_proline(data, window, line_number)
+                    if(result != ''):
+                        results.append(result)
+            line_number = line_number + 1
     return(results)
 
 # ------------------------------------------------------------------------
