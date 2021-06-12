@@ -63,6 +63,7 @@ def basename(filename):
     Removes the path and extension from a filename
 
     10.05.21 Original By: ACRM
+    07.06.21       v3 by: Ayub Hareed 
     """
     # Remove the file extension
     offset = filename.rfind('.')
@@ -73,6 +74,10 @@ def basename(filename):
     offset = filename.rfind('/')
     if(offset >= 0):
         filename = filename[offset+1:]
+    
+    underscr =  filename.rfind('_')
+    if (underscr >= 0):
+        filename = filename[:underscr]
 
     return(filename)
 
@@ -226,7 +231,30 @@ def find_prolines(data, window):
     return(results)
 
 # ------------------------------------------------------------------------
-def file_input(filename, window):
+def getsecstrc(directory=None):
+    files_lst = os.listdir(directory)  # list directories
+    results = {} 
+    if directory != None:
+        for file in files_lst:
+            # Read the data file (output of pdbtorsions)
+            file = directory + '/' + file
+            fileid = basename(file)
+
+            with open(file, 'r') as f:
+                raw_lst = f.read().splitlines()
+                sec_lst = [i.split() for i in raw_lst]
+            for line in sec_lst:
+                key = fileid + ',' + line[0]
+                results[key] = line[-1]
+    else:
+        results = ''
+    return (results)
+
+
+
+
+# ------------------------------------------------------------------------
+def file_input(filename, window, strc_dir=None):
     """
     input: filename (string) - pdbtorsions output file name 
 
@@ -243,11 +271,23 @@ def file_input(filename, window):
     # Extract the proline information and 
     # prepend the filename on each line
     for result in find_prolines(data, window):
-        results += fileid + ',' + result + '\n'
+        if strc_dir != None:
+            # finds atom number
+            result_lst = result.split(',')
+            atom_num = result_lst[0]
+            # generates a dictionary for proline secondary structure
+            secstr = getsecstrc(strc_dir)
+            key = fileid + ',' + atom_num
+
+            sec = ',' + '#' + ',' + secstr[key]
+        else:
+            sec = ''
+
+        results += fileid + ',' + result + sec + '\n'
     return (results)
 
 # ------------------------------------------------------------------------
-def directory_input(directory, window):
+def directory_input(directory, window, strc_dir = None):
   """
   Input: directory (string) - directory path where pdbtorsions output are
 
@@ -267,7 +307,18 @@ def directory_input(directory, window):
 
       #  results - prepending the filename to each line
       for result in find_prolines(data, window):
-          results += fileid + ',' + result + '\n'
+          if strc_dir != None:
+            # finds atom number
+            result_lst = result.split(',')
+            atom_num = result_lst[0]
+            # generates a dictionary for proline secondary structure
+            secstr = getsecstrc(strc_dir)
+            key = fileid + ',' + atom_num
+
+            sec = ',' + '#' + ',' + secstr[key]
+          else:
+            sec = ''
+          results += fileid + ',' + result + sec + '\n'
     
   return (results)
 
@@ -324,19 +375,19 @@ if((len(sys.argv) > 4) or
 
 
 window = 3
-if(len(sys.argv) == 4):
-    window = int(sys.argv[3])
+# if(len(sys.argv) == 4):
+#     window = int(sys.argv[3])
 
 if (sys.argv[1] == '-f'):
     # extract proline information from file
     torsions_file = sys.argv[2]
-    proline_results = file_input(torsions_file, window)
+    proline_results = file_input(torsions_file, window, sys.argv[3])
     print(proline_results)
 
 if (sys.argv[1] == '-d'):
     # extract proline information from directory
     directory = sys.argv[2]
-    proline_results = directory_input(directory, window)
+    proline_results = directory_input(directory, window, sys.argv[3])
     print(proline_results)
 
 
