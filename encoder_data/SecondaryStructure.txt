@@ -1,0 +1,20 @@
+# secondary structures generated from pdbsecstr are encoded
+# - coil
+# B bridge 
+# E/e beta strand
+# G/g 3_10 helix
+# H/h alpha helix
+# S bend
+# T/t turn
+#
+- 0 0
+B 0 0
+E 0 1
+e 0 1
+G 1 0
+g 1 0
+H 1 0
+h 1 0
+S 0 0
+T 0 0
+t 0 0
