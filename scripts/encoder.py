@@ -69,18 +69,19 @@ def csv_header(num, window, pro_lst):
     result = ''
     
     # if another encoder is used ontop of the general encoders
-    lst = pro_lst[2]  # get a line of the csv file
-    
-    encoded_sz = len(lst[3:])
+    if (len(pro_lst) > 0):
+        lst = pro_lst[2]  # get a line of the csv file
+        
+        encoded_sz = len(lst[3:])
 
-    # the loop is used to make the header 
-    for prefix in range(0,window):
-        for suffix in range(1,(num + 1)):
-            result += ',' + letters[prefix] + str(suffix)
-    
-    # append the second encoder to the csv header
-    if (encoded_sz > window):
-        result += ',sec1,sec2' 
+        # the loop is used to make the header 
+        for prefix in range(0,window):
+            for suffix in range(1,(num + 1)):
+                result += ',' + letters[prefix] + str(suffix)
+        
+        # append the second encoder to the csv header
+        if (encoded_sz > window):
+            result += ',sec1,sec2' 
 
     return (result)
 

@@ -278,8 +278,14 @@ def file_input(filename, window, strc_dir=None):
             # generates a dictionary for proline secondary structure
             secstr = getsecstrc(strc_dir)
             key = fileid + ',' + atom_num
+            if key in secstr.keys():
+                sec = ',' + '*' + secstr[key]
+            else:
+                no_sec = f'this pdb had no secondary structure info: {key}'
+                with open('/home/ayub/Desktop/cis_proline/pisces/test/cathe.out', 'a') as f:
+                    f.write(f'{no_sec}\n')
+                continue
 
-            sec = ',' + '*' + secstr[key]
         else:
             sec = ''
 

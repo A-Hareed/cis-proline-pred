@@ -82,7 +82,10 @@ done
 # fi
 
 echo "####exporting weka#######"
-export WEKA=/nas/backup/work/newserver/bsmhome/zcbthhn/weka-3-8-3
+# export WEKA=/nas/backup/work/newserver/bsmhome/zcbthhn/weka-3-8-3
+
+export WEKA=/home/ayub/Downloads/weka-3-8-5-azul-zulu-linux/weka-3-8-5
+
 export CLASSPATH="$WEKA/weka.jar"
 export CLASSIFIER=weka.classifiers.functions.MultilayerPerceptron
 
@@ -197,12 +200,16 @@ if [[ $MACHINELEARNING ]]
 then
     for num in 9 10
     do
-        /home/ayubh/project/git_clone/cis-proline-pred/scripts/./getpro_py.py -d $torsion -s $SECSTR -w $num > $CURRENT_DIRECTORY/temp.csv
+        # /home/ayubh/project/git_clone/cis-proline-pred/scripts/./getpro_py.py -d $torsion -s $SECSTR -w $num > $CURRENT_DIRECTORY/temp.csv
+        /home/ayub/Desktop/cis_proline/cis-proline-pred/scripts/./getpro_py.py -d $torsion -s $SECSTR -w $num > $CURRENT_DIRECTORY/temp.csv
+
         CurrentEncode=-"$ENCODER"
         cd "$CURRENT_DIRECTORY"
         echo "####################################################"
         pwd
-        time /home/ayubh/project/git_clone/cis-proline-pred/scripts/./encoder.py $CurrentEncode $CURRENT_DIRECTORY/temp.csv $num > $CURRENT_DIRECTORY/temp_encoded.csv
+        # time /home/ayubh/project/git_clone/cis-proline-pred/scripts/./encoder.py $CurrentEncode $CURRENT_DIRECTORY/temp.csv $num > $CURRENT_DIRECTORY/temp_encoded.csv
+
+        time /home/ayub/Desktop/cis_proline/cis-proline-pred/scripts/./encoder.py $CurrentEncode $CURRENT_DIRECTORY/temp.csv $num > $CURRENT_DIRECTORY/temp_encoded.csv
         # create several csv files with equal amount cis and trans
 
         head -n 1 temp_encoded.csv > $CURRENT_DIRECTORY/temp_cis.csv
@@ -210,7 +217,10 @@ then
         grep "trans" $CURRENT_DIRECTORY/temp_encoded.csv > $CURRENT_DIRECTORY/temp_trans.csv
         echo "encoder DONE!!!!!!!!! \n\n"
         cd "$CURRENT_DIRECTORY"
-        /home/ayubh/project/git_clone/cis-proline-pred/scripts/./join_cis_trans.py $CURRENT_DIRECTORY/temp_cis.csv $CURRENT_DIRECTORY/temp_trans.csv 9
+        # /home/ayubh/project/git_clone/cis-proline-pred/scripts/./join_cis_trans.py $CURRENT_DIRECTORY/temp_cis.csv $CURRENT_DIRECTORY/temp_trans.csv 9
+
+        /home/ayub/Desktop/cis_proline/cis-proline-pred/scripts/./join_cis_trans.py $CURRENT_DIRECTORY/temp_cis.csv $CURRENT_DIRECTORY/temp_trans.csv 9
+        
         echo "####################################################"
         pwd
         head -n 1 temp_encoded.csv | awk -F',' '{for(i=4;i<=NF;++i)print $i}' > inputs.txt
