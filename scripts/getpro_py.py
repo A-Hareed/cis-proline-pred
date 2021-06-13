@@ -279,7 +279,7 @@ def file_input(filename, window, strc_dir=None):
             secstr = getsecstrc(strc_dir)
             key = fileid + ',' + atom_num
 
-            sec = ',' + '#' + ',' + secstr[key]
+            sec = ',' + '*' + secstr[key]
         else:
             sec = ''
 
@@ -315,7 +315,7 @@ def directory_input(directory, window, strc_dir = None):
             secstr = getsecstrc(strc_dir)
             key = fileid + ',' + atom_num
 
-            sec = ',' + '#' + secstr[key]
+            sec = ',' + '*' + secstr[key]
           else:
             sec = ''
           results += fileid + ',' + result + sec + '\n'

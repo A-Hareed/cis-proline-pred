@@ -45,6 +45,7 @@
 #   Revision History:
 #   =================
 #   V1.0   01.05.21  Original   By: Ayub Hareed
+#   V2.0   10.06.21             By: Ayub Hareed
 #*************************************************************************
 # import libraries 
 import os
@@ -105,6 +106,23 @@ def read_encode_file(filename):
                 result.append(line) 
     return (result)
 #*************************************************************************
+def secstr_encode(lst):
+    """
+    input: lst (list string) list of secondary structure encode from the 
+    SeconaryStructure.txt file 
+    returns: dictionary (values (encode))
+    V2.0   10.06.21        By: Ayub Hareed
+    """
+    secstr_dict = {}
+    encode = ''
+    for line in lst:
+        if len(line) > 0 and line[0] != ' ':
+            score = [i for i in line[1:].split()]
+            encode = ','.join(score)
+            secstr_dict[line[0]] = encode
+    return (secstr_dict)
+
+#*************************************************************************
 # BLOSUM62 score for each amino acid
 def blosum_encode(lst):
     """
@@ -152,7 +170,9 @@ class Encode:
         if 'tscale5' in self.encoder or 'abhinandan4' in self.encoder:
             self.dict = tscale5_or_abhinandan4_encode(self.lst)
             return (self.dict)
-
+        if 'sec' == self.encoder:
+            self.dict = secstr_encode(self.lst)
+            return (self.dict)
 
 
 

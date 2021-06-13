@@ -87,18 +87,38 @@ def amino_acid_encoder(proline_csv, encoder):
             result += line[0] + ',' + line[1] + ',' + line[2] + ','
             
             # encode one letter amino acid 
-            for i, item in enumerate(line):
+            if ('*' in line[-1]):
+                for i, item in enumerate(line):
+                    # to insure that the line doesn't end with a comma
+                    if (i > 2 and i < (len(line) - 1)):
+                        if (item in encoder.keys()):  # checks if the correct amino acid is entered
 
-                if (i > 2 and i < (len(line) -1)):  # to insure that the line doesn't end with a comma
-                    if (item in encoder.keys()): # checks if the correct amino acid is entered
+                            encoded_amino_acid = encoder[item]
+                            result += str(encoded_amino_acid) + ','
 
-                        encoded_amino_acid = encoder[item]
-                        result += str(encoded_amino_acid) + ','
-                # last term
-                elif (i > 2 and i == (len(line) - 1)): 
-                    if (item in encoder.keys()):  # checks if the correct amino acid is entered
-                        encoded_amino_acid = encoder[item]
-                        result += str(encoded_amino_acid) + '\n' 
+                    # last term
+                    elif (i > 2 and i == (len(line) - 1)):
+                        # checks if the correct amino acid is entered
+                        item = item.replace('*', '')
+                        sec_encode = utilities.Encode('../encoder_data/SecondaryStructure.txt', 'sec')
+                        sec_dict = sec_encode.get_encode_dict()
+                        encoded_amino_acid = sec_dict[item]
+                        result += str(encoded_amino_acid) + '\n'
+ 
+            else:
+                for i, item in enumerate(line):
+
+                    # to insure that the line doesn't end with a comma
+                    if (i > 2 and i < (len(line) - 1)):
+                        if (item in encoder.keys()):  # checks if the correct amino acid is entered
+
+                            encoded_amino_acid = encoder[item]
+                            result += str(encoded_amino_acid) + ','
+                    # last term
+                    elif (i > 2 and i == (len(line) - 1)):
+                        if (item in encoder.keys()):  # checks if the correct amino acid is entered
+                            encoded_amino_acid = encoder[item]
+                            result += str(encoded_amino_acid) + '\n'
     return (result)
 
 
@@ -110,6 +130,11 @@ window = 3
 if(len(sys.argv) == 4):
     window = int(sys.argv[3])
 
+# if ('-s' in sys.argv):
+#     i = sys.argv.index('-s')
+#     sec_encode = sys.argv[i]
+# else:
+#     sec = None
 
 # using blosum45 as encoder
 if(sys.argv[1] == '-b45'):
@@ -177,3 +202,4 @@ if(sys.argv[1] == '-a4'):
 
 
 #*************************************************************************
+
