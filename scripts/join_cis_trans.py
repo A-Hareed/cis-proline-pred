@@ -54,7 +54,7 @@ def read_in_csv(filename):
     return (file_lst)
 
 #********************************************************************
-def test_split(cis_file, trans_file):
+def test_split(cis_file, trans_file, multiple):
     """
     input 
 
@@ -62,7 +62,7 @@ def test_split(cis_file, trans_file):
     """
     
     #  find how much of the file to split the file
-    cis_length = len(cis_file)
+    cis_length = len(cis_file[1:]) * multiple
     # print(cis_length)
 
     # random shuffle of trans data list
@@ -75,7 +75,14 @@ def test_split(cis_file, trans_file):
     start = 0
     counter = 0
     initial_lst = []
-    initial_lst.extend(cis_file)
+    initial_lst.append(cis_file[0])
+
+    # augmentation of cis file e.g copy several times to incease
+    # cis dataset
+    for num in range(0,multiple):
+        initial_lst.extend(cis_file[1:])
+
+
     for line in trans_file:
         # print(counter)
         if (counter <= cis_length):
@@ -145,6 +152,10 @@ if (len(sys.argv) <= 2 or
     sys.argv[1] == '-h'):
     usage_die()
 
+multiple = 1
+if (len(sys.argv) > 3):
+    multiple = int(sys.argv[3])
+
 if (len(sys.argv) > 2):
     # read in the csv file that contains cis
     cis_filename = sys.argv[1]
@@ -157,7 +168,7 @@ if (len(sys.argv) > 2):
 
 
 
-    num = len(test_split(cis_list,trans_list))
+    num = len(test_split(cis_list,trans_list, multiple))
     print(num)
     out_file_lst = file_suffix_name(num)
     print(out_file_lst)
@@ -167,7 +178,7 @@ if (len(sys.argv) > 2):
 
     for i,a in enumerate(out_file_lst):
         out_file_name = 'temp_rand_' + a + '.csv'
-        file_lst = test_split(cis_list,trans_list)
+        file_lst = test_split(cis_list,trans_list, multiple)
         file = final_out(file_lst,i)
         sys.stdout = open(out_file_name, 'w')
         print(file)
