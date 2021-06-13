@@ -315,7 +315,7 @@ def directory_input(directory, window, strc_dir = None):
             secstr = getsecstrc(strc_dir)
             key = fileid + ',' + atom_num
 
-            sec = ',' + '#' + ',' + secstr[key]
+            sec = ',' + '#' + secstr[key]
           else:
             sec = ''
           results += fileid + ',' + result + sec + '\n'
@@ -366,7 +366,7 @@ input parameters:
 
 # Read the command line
 # If '-h' or wrong number of arguments, print usage message and exit
-if((len(sys.argv) > 4) or
+if((len(sys.argv) > 7) or
    (len(sys.argv) < 3) or
    (sys.argv[1] == '-h') or
    sys.argv[1] not in ['-f', '-d']):
@@ -375,19 +375,29 @@ if((len(sys.argv) > 4) or
 
 
 window = 3
-# if(len(sys.argv) == 4):
-#     window = int(sys.argv[3])
+if ('-w' in sys.argv):
+    i = sys.argv.index('-w')
+    window = int(sys.argv[i+1])
+
+
+if ('-s' in sys.argv):
+    i = sys.argv.index('-s')
+    sec_dir = sys.argv[i+1]
+else:
+    sec_dir = None
+
 
 if (sys.argv[1] == '-f'):
     # extract proline information from file
     torsions_file = sys.argv[2]
-    proline_results = file_input(torsions_file, window, sys.argv[3])
+    proline_results = file_input(torsions_file, window, sec_dir)
     print(proline_results)
+
 
 if (sys.argv[1] == '-d'):
     # extract proline information from directory
     directory = sys.argv[2]
-    proline_results = directory_input(directory, window, sys.argv[3])
+    proline_results = directory_input(directory, window, sec_dir)
     print(proline_results)
 
 
@@ -399,6 +409,8 @@ if (sys.argv[1] == '-d'):
 #----------------------------------------------------------------------------
 
 # 
+# if(len(sys.argv) == 4):
+#     window = int(sys.argv[3])
 
 # # Read the data file (output of pdbtorsions)
 # data    = read_file(torsions_file)
