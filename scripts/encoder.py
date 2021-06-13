@@ -30,6 +30,7 @@
 #   Revision History:
 #   =================
 #   V1.0   18.05.21  Original   By: Ayub Hareed
+#   V2.0   10.06.21             By: Ayub Hareed
 #*************************************************************************
 
 # import libraries 
@@ -51,7 +52,7 @@ def read_csv_file(filename):
                 csv_file.append(lst)
     return (csv_file)
 #*************************************************************************
-def csv_header(num, window):
+def csv_header(num, window, pro_lst):
     """
     input: num (intiger) - to show how many ### the encoder has
            window (intiger) - 
@@ -62,13 +63,25 @@ def csv_header(num, window):
     letters = string.ascii_lowercase
     # since window equal sequnce size of either 
     # N-terminal or C-terminal
+
+
     window = window * 2
     result = ''
+    
+    # if another encoder is used ontop of the general encoders
+    lst = pro_lst[2]  # get a line of the csv file
+    
+    encoded_sz = len(lst[3:])
 
     # the loop is used to make the header 
     for prefix in range(0,window):
         for suffix in range(1,(num + 1)):
             result += ',' + letters[prefix] + str(suffix)
+    
+    # append the second encoder to the csv header
+    if (encoded_sz > window):
+        result += ',sec1,sec2' 
+
     return (result)
 
 #*************************************************************************
@@ -142,7 +155,7 @@ if(sys.argv[1] == '-b45'):
     encoder = blosum45.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
-    header = csv_header(20,window) 
+    header = csv_header(20, window, proline_csv)
     print('pbd,atom num,type{}'.format(header)) 
     print(amino_acid_encoder(proline_csv, encoder))
 
@@ -152,7 +165,7 @@ if(sys.argv[1] == '-b62'):
     encoder = blosum62.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
-    header = csv_header(20, window)
+    header = csv_header(20, window, proline_csv)
     print('pbd,atom num,type{}'.format(header))
     print(amino_acid_encoder(proline_csv, encoder))
 
@@ -162,7 +175,7 @@ if(sys.argv[1] == '-b80'):
     encoder = blosum80.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
-    header = csv_header(20, window)
+    header = csv_header(20, window, proline_csv)
     print('pbd,atom num,type{}'.format(header))
     print(amino_acid_encoder(proline_csv, encoder))
 
@@ -172,7 +185,7 @@ if(sys.argv[1] == '-b90'):
     encoder = blosum90.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
-    header = csv_header(20, window)
+    header = csv_header(20, window, proline_csv)
     print('pbd,atom num,type{}'.format(header))
     print(amino_acid_encoder(proline_csv, encoder))
 
@@ -182,7 +195,7 @@ if(sys.argv[1] == '-t5'):
     encoder = tscale5.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
-    header = csv_header(5, window)
+    header = csv_header(5, window, proline_csv)
     print('pbd,atom num,type{}'.format(header))
     print(amino_acid_encoder(proline_csv, encoder))
 
@@ -192,7 +205,7 @@ if(sys.argv[1] == '-a4'):
     encoder = abhinandan4.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
-    header = csv_header(4, window)
+    header = csv_header(4, window, proline_csv)
     print('pbd,atom num,type{}'.format(header))
     print(amino_acid_encoder(proline_csv, encoder))
 
