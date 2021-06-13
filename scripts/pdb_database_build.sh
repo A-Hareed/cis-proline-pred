@@ -49,7 +49,7 @@
 
 
 
-while getopts h:t:f:d:o:e:p:x:m: flag
+while getopts h:t:f:d:o:e:p:x:m:s: flag
 do
     case "${flag}" in
         h) help_input="RUN";;
@@ -61,6 +61,7 @@ do
         p) PDBDATA=${OPTARG};;
         x) ENCODER=${OPTARG};;
         m) MACHINELEARNING=${OPTARG};;
+        s) SECSTR=${OPTARG};;
         
         [?]) printf >&2 "###############################################
 ###############################################
@@ -162,6 +163,13 @@ then
 
             echo "chain extracted to file $torsion/${culled_pdb}_chain.ent"
             pdbtorsions $torsion/${culled_pdb}_chain.ent > $torsion/${culled_pdb}_torsion.txt
+
+            echo "doing a secondary structure extraction...."
+            if [[ $SECSTR ]]
+            then
+                pdbsecstr $torsion/${culled_pdb}_chain.ent > $SECSTR/${culled_pdb}_sec.txt
+                echo "$SECSTR/${culled_pdb}_sec.txt"
+
             echo "torsion extraction done and removing chain files"
             rm $torsion/${culled_pdb}_chain.ent
 
@@ -188,7 +196,7 @@ if [[ $MACHINELEARNING ]]
 then
     for num in 9 10
     do
-        /home/ayubh/project/git_clone/cis-proline-pred/scripts/./getpro_py.py -d $torsion $num > $CURRENT_DIRECTORY/temp.csv
+        /home/ayubh/project/git_clone/cis-proline-pred/scripts/./getpro_py.py -d $torsion -s $SECSTR -w $num > $CURRENT_DIRECTORY/temp.csv
         CurrentEncode=-"$ENCODER"
         cd "$CURRENT_DIRECTORY"
         echo "####################################################"
@@ -201,7 +209,7 @@ then
         grep "trans" $CURRENT_DIRECTORY/temp_encoded.csv > $CURRENT_DIRECTORY/temp_trans.csv
         echo "encoder DONE!!!!!!!!! \n\n"
         cd "$CURRENT_DIRECTORY"
-        /home/ayubh/project/git_clone/cis-proline-pred/scripts/./join_cis_trans.py $CURRENT_DIRECTORY/temp_cis.csv $CURRENT_DIRECTORY/temp_trans.csv
+        /home/ayubh/project/git_clone/cis-proline-pred/scripts/./join_cis_trans.py $CURRENT_DIRECTORY/temp_cis.csv $CURRENT_DIRECTORY/temp_trans.csv 9
         echo "####################################################"
         pwd
         head -n 1 temp_encoded.csv | awk -F',' '{for(i=4;i<=NF;++i)print $i}' > inputs.txt
