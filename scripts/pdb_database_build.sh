@@ -170,6 +170,7 @@ then
                 pdbsecstr $torsion/${culled_pdb}_chain.ent > $SECSTR/${culled_pdb}_sec.txt
                 echo "$SECSTR/${culled_pdb}_sec.txt"
 
+            fi
             echo "torsion extraction done and removing chain files"
             rm $torsion/${culled_pdb}_chain.ent
 
