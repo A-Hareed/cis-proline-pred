@@ -242,7 +242,7 @@ then
         echo "####################################################"
         echo "####################################################"
         echo "time to remove temp files"
-        rm temp*
+        # rm temp*
         rm inputs.txt
 
     done

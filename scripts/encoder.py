@@ -102,22 +102,33 @@ def amino_acid_encoder(proline_csv, encoder):
             
             # encode one letter amino acid 
             if ('*' in line[-1]):
-                for i, item in enumerate(line):
-                    # to insure that the line doesn't end with a comma
-                    if (i > 2 and i < (len(line) - 1)):
-                        if (item in encoder.keys()):  # checks if the correct amino acid is entered
+                sec_encode = utilities.Encode('../encoder_data/SecondaryStructure.txt', 'sec')
+                sec_dict = sec_encode.get_encode_dict()
+                line_test = line[-1].replace('*','')
+                if line_test in sec_dict.keys():
+                    for i, item in enumerate(line):
+                        
+                        # to insure that the line doesn't end with a comma
+                        if (i > 2 and i < (len(line) - 1)):
+                            if (item in encoder.keys()):  # checks if the correct amino acid is entered
 
-                            encoded_amino_acid = encoder[item]
-                            result += str(encoded_amino_acid) + ','
+                                encoded_amino_acid = encoder[item]
+                                result += str(encoded_amino_acid) + ','
 
-                    # last term
-                    elif (i > 2 and i == (len(line) - 1)):
-                        # checks if the correct amino acid is entered
-                        item = item.replace('*', '')
-                        sec_encode = utilities.Encode('../encoder_data/SecondaryStructure.txt', 'sec')
-                        sec_dict = sec_encode.get_encode_dict()
-                        encoded_amino_acid = sec_dict[item]
-                        result += str(encoded_amino_acid) + '\n'
+                        # last term
+                        elif (i > 2 and i == (len(line) - 1)):
+                            # checks if the correct amino acid is entered
+                            item = item.replace('*', '')
+                            sec_encode = utilities.Encode('../encoder_data/SecondaryStructure.txt', 'sec')
+                            sec_dict = sec_encode.get_encode_dict()
+                            if (item in sec_dict.keys()):
+                                encoded_amino_acid = sec_dict[item]
+                                result += str(encoded_amino_acid) + '\n'
+                else:
+                    no_sec = f'this secondary structure not found: {item}'
+                    with open('/home/ayub/Desktop/cis_proline/pisces/test/cathe_encode.out', 'a') as f:
+                        f.write(f'{no_sec}\n')
+                    continue
  
             else:
                 for i, item in enumerate(line):
