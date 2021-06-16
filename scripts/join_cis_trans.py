@@ -177,7 +177,7 @@ if (len(sys.argv) > 2):
     # print(file_list[0][0])
 
     for i,a in enumerate(out_file_lst):
-        out_file_name = 'temp_rand_' + a + '.csv'
+        out_file_name = 'temp_rand_1_' + a + '.csv'
         file_lst = test_split(cis_list,trans_list, multiple)
         file = final_out(file_lst,i)
         sys.stdout = open(out_file_name, 'w')

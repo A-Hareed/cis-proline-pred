@@ -97,8 +97,6 @@ def amino_acid_encoder(proline_csv, encoder):
         # if statement ignores blank lines
         if len(line) > 1:
 
-        # add the pdb name, atom number and torsion angle type
-            result += line[0] + ',' + line[1] + ',' + line[2] + ','
             
             # encode one letter amino acid 
             if ('*' in line[-1]):
@@ -106,6 +104,10 @@ def amino_acid_encoder(proline_csv, encoder):
                 sec_dict = sec_encode.get_encode_dict()
                 line_test = line[-1].replace('*','')
                 if line_test in sec_dict.keys():
+                    
+                    # add the pdb name, atom number and torsion angle type
+                    result += line[0] + ',' + line[1] + ',' + line[2] + ',' 
+                    
                     for i, item in enumerate(line):
                         
                         # to insure that the line doesn't end with a comma
@@ -131,6 +133,10 @@ def amino_acid_encoder(proline_csv, encoder):
                     continue
  
             else:
+
+                # add the pdb name, atom number and torsion angle type
+                result += line[0] + ',' + line[1] + ',' + line[2] + ','
+                
                 for i, item in enumerate(line):
 
                     # to insure that the line doesn't end with a comma
