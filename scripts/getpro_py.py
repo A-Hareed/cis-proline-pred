@@ -54,6 +54,7 @@
 import sys
 import os 
 import utilities # used to convert three letter amino acid code to one letter code
+import re
 # ------------------------------------------------------------------------
 def basename(filename):
     """
@@ -277,19 +278,50 @@ def file_input(filename, window, strc_dir=None):
             atom_num = result_lst[0]
             # generates a dictionary for proline secondary structure
             secstr = getsecstrc(strc_dir)
-            key = fileid + ',' + atom_num
-            if key in secstr.keys():
-                sec = ',' + '*' + secstr[key]
-            else:
-                no_sec = f'this pdb had no secondary structure info: {key}'
-                with open('/home/ayub/Desktop/cis_proline/pisces/test/cathe.out', 'a') as f:
-                    f.write(f'{no_sec}\n')
-                continue
+
+            # range of window to get secondary stucture of each atom
+            full_win = int(window * 2) + 1
+            letter = re.compile(r'\D')
+            number = re.compile(r'\d+')
+            at_num_search = number.search(atom_num)
+            at_letter_search = letter.search(atom_num)
+            at_num = at_num_search.group(0)
+            at_letter = at_letter_search.group(0)
+            # print(at_num)
+            # print(atom_num)
+            chain_letter = letter.search(atom_num)
+            start = int(at_num) - window
+            end = int(at_num) + window + 1
+
+            atom_all = []
+            for num in range(start,end):
+                position = at_letter + str(num)
+                atom_all.append(position)
+            
+            # print(atom_all)
+            # print(len(atom_all))
+            keys = []
+            for atom in atom_all:
+                k = fileid + ',' + atom
+                keys.append(k)
+            # print(keys)
+            # key = fileid + ',' + atom
+            sec = ''
+            for key in keys:
+                # print(key)
+                if key in secstr.keys():
+                    sec += ',' + '*' + secstr[key]
+                else:
+                    no_sec = f'this pdb had no secondary structure info: {key}'
+                    with open('/home/ayub/Desktop/cis_proline/pisces/test/cathe.out', 'a') as f:
+                        f.write(f'{no_sec}\n')
+                    continue
 
         else:
             sec = ''
 
         results += fileid + ',' + result + sec + '\n'
+        # print(results)
     return (results)
 
 # ------------------------------------------------------------------------
@@ -319,18 +351,48 @@ def directory_input(directory, window, strc_dir = None):
             atom_num = result_lst[0]
             # generates a dictionary for proline secondary structure
             secstr = getsecstrc(strc_dir)
-            key = fileid + ',' + atom_num
-            if key in secstr.keys():
-                sec = ',' + '*' + secstr[key]
-            else:
-                no_sec = f'this pdb had no secondary structure info: {key}'
-                with open('/home/ayub/Desktop/cis_proline/pisces/test/cathe.out', 'a') as f:
-                    f.write(f'{no_sec}\n')
-                continue
+            # range of window to get secondary stucture of each atom
+            full_win = int(window * 2) + 1
+            letter = re.compile(r'\D')
+            number = re.compile(r'\d+')
+            at_num_search = number.search(atom_num)
+            at_letter_search = letter.search(atom_num)
+            at_num = at_num_search.group(0)
+            at_letter = at_letter_search.group(0)
+            # print(at_num)
+            # print(atom_num)
+            chain_letter = letter.search(atom_num)
+            start = int(at_num) - window
+            end = int(at_num) + window + 1
+
+            atom_all = []
+            for num in range(start, end):
+                position = at_letter + str(num)
+                atom_all.append(position)
+
+            # print(atom_all)
+            # print(len(atom_all))
+            keys = []
+            for atom in atom_all:
+                k = fileid + ',' + atom
+                keys.append(k)
+            # print(keys)
+            
+            sec = ''
+            # key = fileid + ',' + atom_num
+            for key in keys:
+                if key in secstr.keys():
+                    sec += ',' + '*' + secstr[key]
+                else:
+                    no_sec = f'this pdb had no secondary structure info: {key}'
+                    with open('/home/ayub/Desktop/cis_proline/pisces/test/cathe.out', 'a') as f:
+                        f.write(f'{no_sec}\n')
+                    continue
           else:
             sec = ''
           results += fileid + ',' + result + sec + '\n'
-    
+          print(result)
+        
   return (results)
 
 

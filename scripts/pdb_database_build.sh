@@ -256,3 +256,48 @@ fi
 
 
 #rezpdb=`getresol /home/ayubh/project/git_clone/cis-proline-pred/pdb/2wek.pdb | awk '{print $2}' | awk -F'/' '{print $1}'`
+
+/home/ayub/Desktop/cis_proline/cis-proline-pred/scripts/./getpro_py.py -d /home/ayub/Desktop/cis_proline/pisces/test/tor -s /home/ayub/Desktop/cis_proline/pisces/test/secstr -w 5 > /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/temp.csv
+time /home/ayub/Desktop/cis_proline/cis-proline-pred/scripts/./encoder.py -b68 /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/temp.csv 5 > /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/proline_k5_b68_encoded.csv
+head -n 1 /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/proline_k5_b68_encoded.csv > input_temp.txt
+
+head -n 1 proline_k5_a4_encoded.csv | awk -F',' '{for(i=4;i<=NF;++i)print $i}' > input_a4.txt
+
+head -n 1 secstr_undersample_proline_data_k5_0.csv | awk -F',' '{for(i=4;i<=NF;++i)print $i}' > input_sectr.txt
+
+
+cat input_temp.txt | awk -F',' '{for(i=4;i<=NF;++i)print $i}' > input_b62.txt
+
+/home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/input_b62.txt
+
+time /home/ayub/Desktop/cis_proline/cis-proline-pred/scripts/./encoder.py -t5 /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/temp.csv 5 > /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/majority_undersampling/ensemble_t5/proline_k5_t5_encoded.csv
+
+time /home/ayub/Desktop/cis_proline/pisces/test/minor_overpopulation/./use_imbalance-learn.py pro 17
+
+time /home/ayub/Desktop/cis_proline/cis-proline-pred/scripts/./encoder.py -a4 /home/ayub/Desktop/cis_proline/pisces/test/dataset_k3/temp.csv 3 > /home/ayub/Desktop/cis_proline/pisces/test/dataset_k3/majority_undersampling/ensemble_a4/proline_k3_a4_encoded.csv
+
+time /home/ayub/Desktop/cis_proline/cis-proline-pred/scripts/./getpro_py.py -d /home/ayub/Desktop/cis_proline/pisces/test/tor -s /home/ayub/Desktop/cis_proline/pisces/test/sec_output_full_len -w 9 > /home/ayub/Desktop/cis_proline/pisces/test/dataset_k9/temp_k9.csv
+
+
+
+time /home/ayub/Desktop/cis_proline/cis-proline-pred/scripts/./encoder.py -pseudo /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/temp.csv 5 > /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/majority_undersampling/ensemble_pseudo/proline_k5_pseudo_encoded.csv
+
+
+
+
+time /home/ayub/Desktop/cis_proline/cis-proline-pred/scripts/./encoder.py -t5 /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/temp.csv 5 > /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/majority_undersampling/xgboost/encode_t5/proline_k5_str_v2_encoded.csv
+
+ time /home/ayub/Desktop/cis_proline/pisces/test/minor_overpopulation/./use_imbalance-learn.py proline_k5_pseudo_encoded.csv 17 /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/majority_undersampling/ensemble_pseudo
+
+
+
+
+time /home/ayub/Desktop/cis_proline/cis-proline-pred/scripts/./getpro_py.py -d /home/ayub/Desktop/cis_proline/pisces/test/tor  -w 9 > /home/ayub/Desktop/cis_proline/pisces/test/dataset_k3/temp.csv
+notify-send "Job finished!"
+# 
+
+
+
+time /home/ayub/Desktop/cis_proline/cis-proline-pred/scripts/./encoder.py -t5 /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/majority_undersampling/secstr_full/cleaned_proline_full_secstr.csv 5 > /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/majority_undersampling/secstr_full/proline_secstr_t5_encoded.csv
+
+time /home/ayub/Desktop/cis_proline/cis-proline-pred/scripts/./encoder.py -ant /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/majority_undersampling/secstr_full/cleaned_proline_full_secstr.csv 5 > /home/ayub/Desktop/cis_proline/pisces/test/dataset_k5/majority_undersampling/secstr_full/a4nt5/proline_secstr_ant_encoded.csv

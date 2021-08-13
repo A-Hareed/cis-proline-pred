@@ -52,7 +52,7 @@ def read_csv_file(filename):
                 csv_file.append(lst)
     return (csv_file)
 #*************************************************************************
-def csv_header(num, window, pro_lst):
+def csv_header(num, window, pro_lst, sec_title):
     """
     input: num (intiger) - to show how many ### the encoder has
            window (intiger) - 
@@ -81,8 +81,9 @@ def csv_header(num, window, pro_lst):
         
         # append the second encoder to the csv header
         if (encoded_sz > window):
-            result += ',sec1,sec2' 
-
+            # result += ',sec1,sec2'
+            # result += ',a_sec1,a_sec2,b_sec1,b_sec2,c_sec1,c_sec2,d_sec1,d_sec2,e_sec1,e_sec2,f_sec1,f_sec2,g_sec1,g_sec2,h_sec1,h_sec2,i_sec1,i_sec2' #,j_sec1,j_sec2,k_sec1,k_sec2'
+            result += sec_title
     return (result)
 
 #*************************************************************************
@@ -111,11 +112,21 @@ def amino_acid_encoder(proline_csv, encoder):
                     for i, item in enumerate(line):
                         
                         # to insure that the line doesn't end with a comma
+                        sec_encode = utilities.Encode('../encoder_data/SecondaryStructure.txt', 'sec')
+
+                        sec_dict = sec_encode.get_encode_dict()
                         if (i > 2 and i < (len(line) - 1)):
-                            if (item in encoder.keys()):  # checks if the correct amino acid is entered
+                            if (item in encoder.keys() and '*' not in item):  # checks if the correct amino acid is entered
 
                                 encoded_amino_acid = encoder[item]
                                 result += str(encoded_amino_acid) + ','
+
+                            if ('*' in item):
+                                item = item.replace('*', '')
+                                if (item in sec_dict.keys()):
+                                    encoded_amino_acid = sec_dict[item]
+                                    result += str(encoded_amino_acid) + ','
+
 
                         # last term
                         elif (i > 2 and i == (len(line) - 1)):
@@ -158,9 +169,10 @@ def amino_acid_encoder(proline_csv, encoder):
 # Main program
 # ------------------------------------------------------------------------
 window = 3
-if(len(sys.argv) == 4):
-    window = int(sys.argv[3])
+sec_title = sys.argv[3]
 
+if(len(sys.argv) > 4):
+    window = int(sys.argv[4])
 # if ('-s' in sys.argv):
 #     i = sys.argv.index('-s')
 #     sec_encode = sys.argv[i]
@@ -173,8 +185,8 @@ if(sys.argv[1] == '-b45'):
     encoder = blosum45.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
-    header = csv_header(20, window, proline_csv)
-    print('pbd,atom num,type{}'.format(header)) 
+    header = csv_header(20, window, proline_csv, sec_title)
+    print('pdb,atom num,type{}'.format(header)) 
     print(amino_acid_encoder(proline_csv, encoder))
 
 # using blosum62 as encoder
@@ -183,8 +195,8 @@ if(sys.argv[1] == '-b62'):
     encoder = blosum62.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
-    header = csv_header(20, window, proline_csv)
-    print('pbd,atom num,type{}'.format(header))
+    header = csv_header(20, window, proline_csv, sec_title)
+    print('pdb,atom num,type{}'.format(header))
     print(amino_acid_encoder(proline_csv, encoder))
 
 # using blosum80 as encoder
@@ -193,8 +205,8 @@ if(sys.argv[1] == '-b80'):
     encoder = blosum80.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
-    header = csv_header(20, window, proline_csv)
-    print('pbd,atom num,type{}'.format(header))
+    header = csv_header(20, window, proline_csv, sec_title)
+    print('pdb,atom num,type{}'.format(header))
     print(amino_acid_encoder(proline_csv, encoder))
 
 # using blosum90 as encoder
@@ -203,8 +215,8 @@ if(sys.argv[1] == '-b90'):
     encoder = blosum90.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
-    header = csv_header(20, window, proline_csv)
-    print('pbd,atom num,type{}'.format(header))
+    header = csv_header(20, window, proline_csv, sec_title)
+    print('pdb,atom num,type{}'.format(header))
     print(amino_acid_encoder(proline_csv, encoder))
 
 
@@ -213,8 +225,8 @@ if(sys.argv[1] == '-t5'):
     encoder = tscale5.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
-    header = csv_header(5, window, proline_csv)
-    print('pbd,atom num,type{}'.format(header))
+    header = csv_header(5, window, proline_csv, sec_title)
+    print('pdb,atom num,type{}'.format(header))
     print(amino_acid_encoder(proline_csv, encoder))
 
 
@@ -223,14 +235,32 @@ if(sys.argv[1] == '-a4'):
     encoder = abhinandan4.get_encode_dict()
     proline_csv_file = sys.argv[2]
     proline_csv = read_csv_file(proline_csv_file)
-    header = csv_header(4, window, proline_csv)
-    print('pbd,atom num,type{}'.format(header))
+    header = csv_header(4, window, proline_csv, sec_title)
+    print('pdb,atom num,type{}'.format(header))
+    print(amino_acid_encoder(proline_csv, encoder))
+
+if (sys.argv[1] == '-pseudo'):
+    tscale5 = utilities.Encode('../encoder_data/New_TScale5.txt', 'tscale5')
+    encoder = tscale5.get_encode_dict()
+    proline_csv_file = sys.argv[2]
+    proline_csv = read_csv_file(proline_csv_file)
+    header = csv_header(7, window, proline_csv, sec_title)
+    print('pdb,atom num,type{}'.format(header))
+    print(amino_acid_encoder(proline_csv, encoder))
+
+if (sys.argv[1] == '-ant'):
+    tscale5 = utilities.Encode('../encoder_data/A4_with_TScale5.txt', 'tscale5')
+    encoder = tscale5.get_encode_dict()
+    proline_csv_file = sys.argv[2]
+    proline_csv = read_csv_file(proline_csv_file)
+    header = csv_header(9, window, proline_csv, sec_title)
+    print('pdb,atom num,type{}'.format(header))
     print(amino_acid_encoder(proline_csv, encoder))
 
 #*************************************************************************
 #   first function handles argv arguments and error inputs from the 
 #   command line along with the help (-h) input
-
+# ../encoder_data/A4_with_TScale5.txt
 
 #*************************************************************************
 
