@@ -257,6 +257,16 @@ if (sys.argv[1] == '-ant'):
     print('pdb,atom num,type{}'.format(header))
     print(amino_acid_encoder(proline_csv, encoder))
 
+if (sys.argv[1] == '-and'):
+    blosum90 = utilities.Encode('../encoder_data/BLOSUM90_a4', 'a4nb90')
+    encoder = blosum90.get_encode_dict()
+    proline_csv_file = sys.argv[2]
+    proline_csv = read_csv_file(proline_csv_file)
+    header = csv_header(24, window, proline_csv, sec_title)
+    print('pdb,atom num,type{}'.format(header))
+    print(amino_acid_encoder(proline_csv, encoder))
+
+
 #*************************************************************************
 #   first function handles argv arguments and error inputs from the 
 #   command line along with the help (-h) input

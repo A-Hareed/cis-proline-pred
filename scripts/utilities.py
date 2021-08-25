@@ -124,7 +124,7 @@ def secstr_encode(lst):
 
 #*************************************************************************
 # BLOSUM62 score for each amino acid
-def blosum_encode(lst):
+def blosum_encode(lst,new=False):
     """
     input: lst (list string) list of blosum scores from the blosum file 
     returns: dictionary (values (interger list))
@@ -133,10 +133,15 @@ def blosum_encode(lst):
     blosum_dict = {}
     blosum_sub_score = ''
     for line in lst:
-        if len(line) > 0 and line[0] != ' ':
+        if (len(line) > 0 and line[0] != ' ' and new == False):
             score = [i for i in line[1:].split()]
             blosum_sub_score = ','.join(score[:20])  
             blosum_dict[line[0]] = blosum_sub_score
+        elif (len(line) > 0 and line[0] != ' ' and new == True):
+            if (len(line) > 20):
+                score = [i for i in line[1:].split()]
+                blosum_sub_score = ','.join(score[:24])
+                blosum_dict[line[0]] = blosum_sub_score
     return (blosum_dict)
 
 #*************************************************************************
@@ -173,7 +178,9 @@ class Encode:
         if 'sec' == self.encoder:
             self.dict = secstr_encode(self.lst)
             return (self.dict)
-
+        if 'a4nb90' in self.encoder and 'blosum' not in self.encoder:
+            self.dict = blosum_encode(self.lst,new=True)
+            return (self.dict)
 
 
 #*************************************************************************

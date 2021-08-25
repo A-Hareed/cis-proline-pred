@@ -391,7 +391,7 @@ def directory_input(directory, window, strc_dir = None):
           else:
             sec = ''
           results += fileid + ',' + result + sec + '\n'
-          print(result)
+        #   print(result)
         
   return (results)
 
