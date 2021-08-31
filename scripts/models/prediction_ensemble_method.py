@@ -6,8 +6,8 @@
 #
 #   Version:    V1.0
 #   Date:       03.07.21
-#   Function:   takes cis/trans prediction outputs from XGBoost and
-#               Random Forests to produce a combined final preditction 
+#   Function:   takes cis/trans prediction outputs from XGBoost (PROGRAM: boost.py) and
+#               Random Forests (PROGRAM: weka) to produce a combined final preditction
 #
 #   Author:     Ayub Hareed
 #
@@ -33,6 +33,8 @@
 #   Usage: cis/trans proline prediction from two machine learning classifiers.
 #          commandline Example: ./boost.py [xgboost prediction file] [Random Forest prediction file]
 #          ***order is important 
+#          *** the xgboost file
+
 #   ======
 #
 #*************************************************************************
