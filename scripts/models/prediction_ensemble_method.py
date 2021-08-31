@@ -31,10 +31,8 @@
 #*************************************************************************
 #
 #   Usage: cis/trans proline prediction from two machine learning classifiers.
-#          commandline Example: ./boost.py [xgboost prediction file] [Random Forest prediction file]
-#          ***order is important 
-#          *** the xgboost file
-
+#          commandline Example: ./boost.py [probalility threshold] -x [xgboost prediction file] -r [Random Forest prediction file]
+#          ***the last parameter should be Random forest
 #   ======
 #
 #*************************************************************************
@@ -136,9 +134,14 @@ def vote_count(all_lst,p_input):
     NOTE that each vote is weighted by its probability.
 
 
-    Input:   (string) filename - a filename for the txt file
-    Returns: (list) lst - a list that each item corresponds to each line
-             of the prediction text file; e.g. [['1','cis','0.70'],...]
+    Input:   (dictionary) all_lst - a dictionary containing all predictions
+             (float) p_input - a float that is used for prediction probability 
+                               threshold 
+
+    Returns: (dictionary) majority_vote - a list that each item corresponds to each line
+                                          of the prediction text file; e.g. [['1','cis','0.70'],...]
+             (set) full_lst - a set that contains the numbers correponding to each 
+                              testing sample
 
     03.07.21 Original By: Ayub Hareed
     """
@@ -161,7 +164,8 @@ def vote_count(all_lst,p_input):
             
             prob = float(line[-1])
             full_lst.add(num)
-######################################################################            
+######################################################################        
+            # probability threshold to cut off what predictions are added    
             if (prob >= p_input):
                 if num not in vote_dict.keys():
                     vote_dict[num] = [[class_pred,prob]]
@@ -173,26 +177,43 @@ def vote_count(all_lst,p_input):
     if len(all_lst) >= 1:
         for k, v in vote_dict.items():
             trans_score = float(0)  # a varible used to store the sum of all 
-                                    # 
-            cis_score = float(0)
-            cis_count = float(0)
-            trans_count = float(0)
+                                    # the trans probability for each prediction
+                                    # sample.
+
+            cis_score = float(0)    # a varible used to store the sum of all 
+                                    # the cis probability for each prediction
+                                    # sample.
+
+            cis_count = float(0)    # stores the number of cis predicted for each
+                                    # sample 
+
+            trans_count = float(0)  # stores the number of cis predicted for each
+                                    # sample
+            
+            # checks if at least one class is present                                     
             if ('cis' in v[0][0] or 'trans' in v[0][0]):
+                # the item "v" contains multiple predictions and so loops through 
+                # it. This is due to Random Forest having 20 predictions in this
+                # project 
                 for i in v:
-                
-                    if (i[0] == 'cis'):
+                    
+                    if (i[0] == 'cis'): 
                         cis_score += i[1]
                         cis_count += 1
                     if (i[0] == 'trans'):
                         trans_score += i[1]
                         trans_count += 1
-                    if (trans_score > cis_score):
+                    if (trans_score > cis_score): 
                         trans_prob = trans_score/trans_count
                         majority_vote[k] = ['trans',trans_score, trans_prob]
                     if (trans_score < cis_score ):
                         cis_prob = cis_score/cis_count
                         majority_vote[k] = ['cis', cis_score, cis_prob]
-                    if (trans_score == cis_score):
+                    
+                    # If the score for cis and trans are equal 
+                    # than a random choice is used to randomly select
+                    # a class.
+                    if (trans_score == cis_score): 
                         class_lst = ['cis', 'trans']
                         ran = random.choice(class_lst)
                         
@@ -202,17 +223,36 @@ def vote_count(all_lst,p_input):
                             majority_vote[k] = ['trans', trans_score]
 
 
-    else:
-        print('none')
+    else: # if the list is empty than a notification is printed
+        print('Random Forest predictions are empty!!!')
     return (majority_vote,full_lst)
 
 #------------------------------------------
 def counter(vote_dict, i):
+    """
+    takes a dictionary that contains XGBoost prediction and Random
+    Forest predictions to give a final combinded prediction 
+    NOTE that each vote from XGBoost and Rnadom Forest is weighted 
+    by their probabilities.
+    ***used in the function preformance***
+
+
+    Input:   (dictionary) vote_dict - a dictionary that contains Random Forest
+                                      and XGBoost prediction
+
+             (integers) i - an integer that corresponds to the test sample number
+
+    Returns: (dictionary) final - a dictionary that contains the final combined prediction
+
+    03.07.21 Original By: Ayub Hareed
+    """
+
     trans_count = 0
     cis_count = 0
-    cis_score = 0
+    cis_score = 0 # 
     trans_score = 0
     final = {}
+    
     for k, v in vote_dict.items():
         if v[0] == 'trans':
             trans_count +=1
@@ -232,11 +272,25 @@ def counter(vote_dict, i):
         if (trans_score > cis_score):
             final[i] = ['trans', 1]
         # there is a chance that the two probs could be equal!!!
-    # print(final)
+
     return (final)
 
 #------------------------------------------
 def all_jury(RanF_dict, xgb_dict, st1):
+    """
+    takes dictionaries that contains XGBoost prediction and Random
+    Forest predictions to give a final combinded prediction
+
+    Input:   (dictionary) RanF_dict - a dictionary that contains Random Forest
+                                      prediction
+             (dictionary) xgb_dict - a dictionary that contains XGBoost prediction
+
+             (list) st1 - a list that corresponds to the test sample numbers
+
+    Returns: (dictionary) final - a dictionary that contains the final combined prediction
+
+    03.07.21 Original By: Ayub Hareed
+    """
 
     final_vote = {}
     # 1: cis, total, prob}
@@ -258,11 +312,27 @@ def all_jury(RanF_dict, xgb_dict, st1):
     return (final_vote)
 #------------------------------------------
 def preformance(lst, vote_dict):
-    cis_correct = 0
+    """
+    takes dictionaries that contains XGBoost prediction and Random
+    Forest predictions to give a final combinded prediction
+
+    Input:   (dictionary) vote_dict - a dictionary that contains cis/trans
+                                      predictions
+
+             (list) st1 - a list that actual sample classes (labels)
+             
+    Returns: (string) result - contains mcc results and predictions accuracy for
+                               the given prediction
+
+    03.07.21 Original By: Ayub Hareed
+    """
+
+    cis_correct = 0 # varible to store the correct cis number 
     cis_total = 0
-    trans_correct = 0
+    trans_correct = 0  # varible to store the correct trans number
     trans_total = 0
     
+    # loops through actual sample labels.
     for line in lst:
         
         if line[0] in vote_dict.keys():
@@ -293,75 +363,65 @@ def preformance(lst, vote_dict):
     cis_wrong = cis_total - cis_correct
     trans_wrong = trans_total-trans_correct
     average = (cis_accuracy + trans_accuracy)/2
-
+    # calculate mcc number
     cis_mcc = calculate_mcc(cis_correct,trans_correct,trans_wrong,cis_wrong)
     result = f'cis accuracy: {cis_accuracy}\ntrans_accuracy: {trans_accuracy}\navrg: {average}\ncis correct num: {cis_correct}\ncis wrong: {cis_total - cis_correct}\ntrans correct: {trans_correct}\ntrans wrong: {trans_total-trans_correct}\nMCC: {cis_mcc}\n{cis_correct+trans_correct+trans_wrong+cis_wrong}'
 
     return (result)
 
-#------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #       main program
-#------------------------------------------
-# filename = sys.argv[1]
-# p_input = float(sys.argv[2])
-predict_line = []
-# v_dict = {}
-print(f'the input len is: {len(sys.argv[3:])}')
-for i in sys.argv[3:]:
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+# get probability threshold from commandline or assigns one
+if ('-w' != sys.argv[1]):
+    prob_threshold = float(sys.argv[1])
+    if (prob_threshold > 1):
+        num = float(prob_threshold/100)
+    else: 
+        num = prob_threshold
+else:
+    num = 0.65
+
+# Weka's Random Forest predictions 
+predict_line = [] # a list to have all the Random Forest predictions
+
+if ('-r' in sys.argv):
+    i = sys.argv.index('-r')
+    r = int(sys.argv[i+1])
+
+print(f'the input len is: {len(sys.argv[r:])}')
+# gets all the Random Forest prediction files
+for i in sys.argv[r:]:
     filename = i
     print(filename)
     predict_line.append(read_file(filename))
-pct = int(sys.argv[1])
-lst_p = [pct]
-for num in lst_p:
-    num = float(num/100)
-    # print(f'MCC: {num}')  
-    vote_dict, full_lst = vote_count(predict_line, num)
-    # print(vote_dict)
-    xgb_dict = read_xgb_file(sys.argv[2])
+
+vote_dict, full_lst = vote_count(predict_line, num)
+# mcc for the weka models
+print('just weka')
+print(preformance(predict_line[0], vote_dict))
 
 
-    print('#####################################################################################################################################')
-    # print(xgb_boost)
-    lst = []
-    lst.extend(list(vote_dict.keys()))
-    lst.extend(list(xgb_dict.keys()))
-    st1 = set(lst)
-    final_vote = all_jury(vote_dict,xgb_dict, full_lst)
-# [0]
-    for k, v in vote_dict.items():
-        print(k,v)
-
-    # for k, v in final_vote.items():
-        # print(k, v)
-
-    print('just weka')
-    # print(preformance(predict_line[0], vote_dict))
+# XGBoost predictions 
+if ('-x' in sys.argv):
+    i = sys.argv.index('-x')
+    x = int(sys.argv[i+1])
+    xgb_dict = read_xgb_file(sys.argv[x])
 
 
+print('#####################################################################################################################################')
+# combined vote from both XGBoost and Random FOrest
+
+lst = []
+lst.extend(list(vote_dict.keys()))
+lst.extend(list(xgb_dict.keys()))
+st1 = set(lst)
+final_vote = all_jury(vote_dict,xgb_dict, full_lst) # combined vote
+
+
+
+if ('-x' in sys.argv and '-r' in sys.argv):
     print('both weka and xgboost')
     print(preformance(predict_line[0],final_vote))
-    # print(predict_line)
-    # st1 = list(vote_dict.keys())
-    # st2 = list(xgb_boost.keys())
-    lst = []
-    lst.extend(list(vote_dict.keys()))
-    lst.extend(list(xgb_dict.keys()))
-    st1 = set(lst)
-
-    # print(list(vote_dict.keys()))
-    # print(list(xgb_boost.keys()))
-    print(type(list(vote_dict.keys())))
-    print(len(lst))
-    print(len(st1))
-    print(len(full_lst))
-    # print(vote_dict['285'][0])
-    # for line in predict_line:
-    #     print(line)
-
-
-# #------------------------------------------------------------
-# #		main program
-# #------------------------------------------------------------
-# print(read_xgb_file(sys.argv[1]))
-# print()
