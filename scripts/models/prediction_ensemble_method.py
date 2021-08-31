@@ -1,30 +1,91 @@
 #!/usr/bin/python3
+#*************************************************************************
+#
+#   Program:    ensemble_prediction
+#   File:       prediction_ensemble_method.py
+#
+#   Version:    V1.0
+#   Date:       03.07.21
+#   Function:   takes cis/trans prediction outputs from XGBoost and
+#               Random Forests to produce a combined final preditction 
+#
+#   Author:     Ayub Hareed
+#
+#
+#   EMail:     ayubm56@gmail.com
+#
+#*************************************************************************
+#
+#   This program is not in the public domain, but it may be copied
+#   according to the conditions laid out in the accompanying file
+#   COPYING.DOC
+#
+#   The code may be modified as required, but any modifications must be
+#   documented so that the person responsible can be identified. If
+#   someone else breaks this code, I don't want to be blamed for code
+#   that does not work!
+#
+#   The code may not be sold commercially or included as part of a
+#   commercial product except as described in the file COPYING.DOC.
+#
+#*************************************************************************
+#
+#   Usage: cis/trans proline prediction from two machine learning classifiers.
+#          commandline Example: ./boost.py [xgboost prediction file] [Random Forest prediction file]
+#          ***order is important 
+#   ======
+#
+#*************************************************************************
 
-print('ok')
-
+# Import libraries
 import sys
 import math
 import random
 
 #------------------------------------------
 def read_file(filename):
+    """
+    read in the proline predictions from Random Forest classifiers
+
+
+    Input:   (string) filename - a filename for the txt file
+    Returns: (list) lst - a list that each item corresponds to each line 
+             of the prediction text file; e.g. [['1','cis','cis','0.70'],...] 
+             where the second item is the actual label and the third item is the prediction
+
+    03.07.21 Original By: Ayub Hareed
+    """
     lst = []
+
+    # read text file
     with open(filename, 'r') as f:
-        file_lst = f.read().splitlines()
-    counter = 0
+        file_lst = f.read().splitlines() # turn each line into list items
+    counter = 0 # used to show skip the first line 
     for line in file_lst:
         if ('inst#' in line):
             counter += 1
             continue
-        if (line == ''):
+        if (line == ''): # prevents adding empty lines 
             continue
+    
         if (counter == 1):
-            lst_line = line.split()
-            lst.append(lst_line)
+            lst_line = line.split() # split each line into a list 
+            lst.append(lst_line) # creates a list of lists 
     return (lst)
 
 #------------------------------------------------------------
 def read_xgb_file(filename):
+    """
+    read in the proline predictions from XGBoost classifiers
+
+
+    Input:   (string) filename - a filename for the txt file
+    Returns: (list) lst - a list that each item corresponds to each line
+             of the prediction text file; e.g. [['1','cis','0.70'],...]
+
+    03.07.21 Original By: Ayub Hareed
+    """
+
     lst = []
     # read the xgboost prediction csv file 
     with open(filename, 'r') as f:
@@ -44,9 +105,18 @@ def read_xgb_file(filename):
         count += 1
     return (xgb_dict)
 #------------------------------------------------------------
-#------------------------------------------
 def calculate_mcc(tp,tn,fp,fn):
-    
+    """
+    calculates the mcc score for a given predition
+
+
+    Input:   (integers) tp,tn,fp,fn - ingers from actual lables and 
+             predicted labels
+    Returns: (float) mcc - mcc score
+
+    03.07.21 Original By: Ayub Hareed
+    """
+
     numerator = tp * tn - fp * fn
     denominator = (tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)
     denominator_root = math.sqrt(denominator)
@@ -57,11 +127,31 @@ def calculate_mcc(tp,tn,fp,fn):
         return (numerator / denominator_root)
 
 #------------------------------------------
-
 def vote_count(all_lst,p_input):
-    vote_dict = {}
-    majority_vote = {}
-    full_lst = set()
+    """
+    takes one or more Random Forest weka prediction outputs 
+    and takes a pooled vote from each prediction.
+    NOTE that each vote is weighted by its probability.
+
+
+    Input:   (string) filename - a filename for the txt file
+    Returns: (list) lst - a list that each item corresponds to each line
+             of the prediction text file; e.g. [['1','cis','0.70'],...]
+
+    03.07.21 Original By: Ayub Hareed
+    """
+
+
+    vote_dict = {}    # dictionary that would contain  testing dataset number as 
+                      # the key and each vote and probability as the items
+
+    majority_vote = {}  # a dictionary that contains the testing dataset number as
+                        # the key and the class with the most votes as the items
+
+    full_lst = set()    # contains the testing dataset number 
+
+    # loops through a list that contains all the weka predictions
+    # where each item is another list that corresponds to individual predictions
     for lst in all_lst:
         for line in lst:
             class_pred = line[2][2:]
@@ -70,22 +160,18 @@ def vote_count(all_lst,p_input):
             prob = float(line[-1])
             full_lst.add(num)
 ######################################################################            
-            # print(f'{num}. class: {class_pred} ; probability: {prob}')
             if (prob >= p_input):
                 if num not in vote_dict.keys():
                     vote_dict[num] = [[class_pred,prob]]
                 else:
                     vote_dict[num].append([class_pred,prob])
-                    # print('yes')
-            # else:
-            #     if num not in vote_dict.keys():
-            #         vote_dict[num] = [['unknown', 0.0]]
-                # else:
-                #     vote_dict[num].append(['unknown', 0.0])
-    # print(vote_dict)
+
+
+    # if the all_lst has at least one prediction
     if len(all_lst) >= 1:
         for k, v in vote_dict.items():
-            trans_score = float(0)
+            trans_score = float(0)  # a varible used to store the sum of all 
+                                    # 
             cis_score = float(0)
             cis_count = float(0)
             trans_count = float(0)
@@ -112,10 +198,8 @@ def vote_count(all_lst,p_input):
                             majority_vote[k] = ['cis', cis_score]
                         if (ran == 'trans'):
                             majority_vote[k] = ['trans', trans_score]
-            # else:
-            #     majority_vote[k] = ['unknown',len(v),0]
-                # else: 
-    
+
+
     else:
         print('none')
     return (majority_vote,full_lst)
@@ -151,36 +235,22 @@ def counter(vote_dict, i):
 
 #------------------------------------------
 def all_jury(RanF_dict, xgb_dict, st1):
+
     final_vote = {}
     # 1: cis, total, prob}
     print(f'############################################################\n############################\n###########\n{len(RanF_dict.keys())}############################################################\n############################\n###########\n')
-    # if (len(weka_dict.keys()) > len(xgb_dict.keys())):
-    trans_count = 0
-    cis_count = 0
-    
+
+    # loop through the testing samples individual number [determined by order]
     for i in st1:
-        # for k, v in weka_dict.items():
-
-        # 
-
+        # if a prediction is found in both Random Forest and XGBoost
         if (i in RanF_dict.keys() and i in xgb_dict.keys()):
             vote = {'RanF': [RanF_dict[i][0],RanF_dict[i][2]], 'xgb': [xgb_dict[i][0],xgb_dict[i][1]]}
             result = counter(vote,i)
+        # if a prediction is only given by XGBoost and not Random Forest (since it might not meet threshold)
         elif (i not in RanF_dict.keys() and i in xgb_dict.keys()):
             vote = {'RanF': 'unknown', 'xgb': [xgb_dict[i][0],xgb_dict[i][1]]}
             result = counter(vote,i)
-
-        
-        # if i == '721':
-        #     print(f'\n\n##################\nml dict')
-        #     print({'RanF': RanF_dict[i][0], 'xgb': xgb_dict[i][0], 'logR': logR_dict[i][0], 'Smv':Smv_dict[i][0], 'Knn': Knn_dict[i][0]})
-        # print(type(st1[0]))
-        # print(Knn_dict['503'])
-        # print(logR_dict['503'])
-        # print(Smv_dict['503'])
-        # print(RanF_dict['503'])
-        # print(xgb_dict['503'])
-
+        # add the combined vote to the  dictionary
         final_vote[i] = result[i]
 
     return (final_vote)
