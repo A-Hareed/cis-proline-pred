@@ -49,3 +49,8 @@ Another Machine Learning predictor is built using both the predictions from Rand
 class is the model with the higer power (higher probalility). 
 
 This is done using the program `scripts/models/prediction_ensemble_method.py` 
+
+
+
+## Licence and copyright
+© Ayub Hareed, Birkbeck: University of London
