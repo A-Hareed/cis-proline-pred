@@ -3,6 +3,7 @@
 ML tools like Weka and XGBoost are used to train the binary classifier to predict wether a amino acids attached to prolines have cis (0 degree)
 omega-angle (ω) or trans (180 deree).
 
+## 1.  extracting the proline datasets:
 
 To do this, a protein dataset is built using a file listing all PDB chains used:
 
@@ -28,6 +29,23 @@ Once the torsion files are created for each pdb file the proline dataset csv fil
 scripts/./getpro_py.py -d <directory with torsion>  -w <an intiger for window size> > proline_dataset.csv
 ```
 
-Once the proline datasets are exracted to a single csv file its encoded using the encoder program `scripts/encoder.py` with the choice of an encoder e.g. BLOSUM90
+Once the proline datasets are exracted to a single csv file its encoded using the encoder program `scripts/encoder.py` with the choice of an encoder e.g. **BLOSUM90**
 
+## 2. Machine Learning Modles:
 
+The before building and training the Machine Learning models, the dataset needs to be split into training and testing samples using the program `scripts/build_train_test_sets.py`
+
+Once the training and testing samples are created the XGBoost models are trained using XGBoost python wrapper and its performance is evaluated 
+on **MCC (Matthews correlation coefficient)** score.
+
+Random Forest model is built using **weka** (a Machine Learning software) and the parameters used are shown in
+
+a bash script: `scripts/models/weka_RF/random_forest_model.sh`
+
+Both the XGBoost models and Random Forest models are located in the **models** directory under scripts. 
+
+Another Machine Learning predictor is built using both the predictions from Random Forest and XGBoost, where the predicted
+
+class is the model with the higer power (higher probalility). 
+
+This is done using the program `scripts/models/prediction_ensemble_method.py` 
