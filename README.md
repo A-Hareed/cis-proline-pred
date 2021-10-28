@@ -52,5 +52,6 @@ This is done using the program `scripts/models/prediction_ensemble_method.py`
 
 
 
+---
 ## Licence and copyright
 © Ayub Hareed, Birkbeck: University of London
